@@ -2,37 +2,19 @@
 #include <iostream>
 #include <string>
 
-#include "../include/entity.h"
-#include "../include/func.h"
+#include "../../include/Game/entity.h"
+#include "../../include/Game/func.h"
 
 //Creating the texture/entity
 Entity::Entity(const char* filePath, SDL_Renderer *renderer)
     :texture(NULL), renderer(renderer)
 {
-    src->x = 0;
-    src->y = 0;
-    src->w = 1920;
-    src->h = 1080;
-
-    dst->x = 0;
-    dst->y = 0;
-    dst->w = 1920;
-    dst->h = 1080;
-
     texture = loadIMG(filePath, renderer);
 }
 
 Entity::Entity(){
-    src->x = 0;
-    src->y = 0;
-    src->w = 64;
-    src->h = 64;
 
-    dst->x = 0;
-    dst->y = 0;
-    dst->w = 64;
-    dst->h = 64;
-}
+};
 
 
 
@@ -133,5 +115,9 @@ SDL_Rect* Entity::ReturnSrc(){
 }
 
 SDL_Rect* Entity::ReturnDst(){
-    return src;
+    return dst;
+}
+
+SDL_Renderer* Entity::ReturnRenderer(){
+    return renderer;
 }

@@ -4,9 +4,9 @@
 #include <vector>
 
 
-#include "../include/event.h"
-#include "../include/mouse.h"
-#include "../include/entity.h"
+#include "../../include/Game/event.h"
+#include "../../include/Game/mouse.h"
+#include "../../include/Game/entity.h"
 
 
 
@@ -28,7 +28,9 @@ void Event::AddEntity(Entity *entity){
 
 void Event::Show(){
     for(Entity* e: entities){
-        SDL_RenderCopy(renderer, e->ReturnTex(), e->ReturnSrc(), e->ReturnDst());
+        if((SDL_RenderCopy(e->ReturnRenderer(), e->ReturnTex(), e->ReturnSrc(), e->ReturnDst())!= 0)){
+            std::cout<<"SDL didn't render out at Event::Show. SDl_Error: "<< SDL_GetError();
+        }
     }
 }
 
@@ -37,6 +39,7 @@ void Event::RenderLoop(){
     SDL_RenderPresent(renderer);
 }
 
+//In progress
 void Event::Window(int num){
     switch(num){
         case 1:

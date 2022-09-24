@@ -25,9 +25,10 @@ public:
     SDL_Texture* ReturnTex();
     SDL_Rect* ReturnSrc();
     SDL_Rect* ReturnDst();
+    SDL_Renderer* ReturnRenderer();
 protected:
-    SDL_Rect* src;
-    SDL_Rect* dst;
+    SDL_Rect* src = new SDL_Rect { 0, 0, 1920, 1080 };
+    SDL_Rect* dst = new SDL_Rect { 0, 0, 1920, 1080 };
     SDL_Texture* texture;
     SDL_Renderer *renderer;
 

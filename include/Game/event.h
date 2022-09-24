@@ -3,8 +3,8 @@
 #include <iostream>
 #include <vector>
 
-#include "../include/entity.h"
-#include "../include/mouse.h"
+#include "entity.h"
+#include "mouse.h"
 
 class Event{
 public:

@@ -6,5 +6,4 @@
 #include "entity.h"
 
 SDL_Texture* loadIMG(const char* filepath, SDL_Renderer* renderer);
-void bgFillC(const char* filepath, SDL_Renderer* renderer);
-void bgFill(const char* filepath, SDL_Renderer* renderer);
+void init(SDL_Window *window, SDL_Renderer *renderer);
