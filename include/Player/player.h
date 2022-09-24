@@ -7,7 +7,11 @@
 #include "../Game/entity.h"
 
 class Player : public Entity{
-    Player(std::string username, Entity PlayerE);
+public:
+    Player(std::string username, const char *filePath, SDL_Renderer *rndrr);
     int MoveX(int x);
     int MoveY(int y);
+    int NxtFrame();
+private:
+    std::string usrnm;
 };

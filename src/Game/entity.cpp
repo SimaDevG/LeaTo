@@ -97,13 +97,13 @@ void Entity::ChangeWDst(int x, int y, int w, int h){
 
 //Changes X of dst SDL_Rect
 void Entity::ChangeDstX(int num){
-        dst->x += num;
+    dst->x = num;
 }
 
 
 //Changes Y of dst SDL_Rect
 void Entity::ChangeDstY(int num){
-    dst->y += num;
+    dst->y = num;
 }
 
 SDL_Texture* Entity::ReturnTex(){

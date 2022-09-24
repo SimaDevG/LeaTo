@@ -7,7 +7,7 @@
 #include "../include/Game/func.h"
 #include "../include/Game/mouse.h"
 #include "../include/Game/event.h"
-
+#include "../include/Player/player.h"
 
 //SDL Initializations
 SDL_Surface *logo;
@@ -17,14 +17,19 @@ SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED
 //LeaTo variables
 const Uint8 *state = SDL_GetKeyboardState(NULL);
 SDL_Rect SizePlace_Menu = {0, 0, 600, 600};
-
 bool ShowMenu = false;
 
 int MenuWidth = 1080/2-100;
 int MenuHeight = 720/2-100;
-//Loop variables
+
 SDL_Event input;
 bool* running = new bool(true);
+
+//Player
+Player User("Sima", "../res/plrprttp.png", renderer);
+
+
+
 
 
 
@@ -38,10 +43,36 @@ Event Menu(renderer, SizePlace_Menu, Menu_Entities);
 Mouse cursor("../res/cursor.png", renderer);
 Entity Bg("../res/bg.png", renderer);
 //Menu
-Entity *MenuBg = new Entity("../res/blue.png", renderer);
+Entity *MenuBg = new Entity("../res/bg.png", renderer);
 
 
+int Input(){
+    SDL_PollEvent(&input);
+    if(input.type == SDL_QUIT){
+        *running = false;
+    }
+    if(state[SDL_SCANCODE_SPACE]){
+        ShowMenu = 0;
+    }
+    if(state[SDL_SCANCODE_ESCAPE]){
+        ShowMenu = 1;
+    }
+    if(state[SDL_SCANCODE_D]){
+        User.MoveX(1);
+    }
+    if(state[SDL_SCANCODE_A]){
+        User.MoveX(-1);
+    }
+    if(state[SDL_SCANCODE_S]){
+        User.MoveY(1);
+    }
+    if(state[SDL_SCANCODE_W]){
+        User.MoveY(-1);
+    }
 
+    return 1;
+
+}
 
 int main(int argc, char* argv[]) {
     //Other initializations
@@ -54,39 +85,26 @@ int main(int argc, char* argv[]) {
     MenuBg->ChangeWDst(MenuWidth, MenuHeight, 100, 100);
     Menu.AddEntity(MenuBg);
 
-
-
-
-
+    //User inits
+    User.ChangeWDst(540, 360, 64, 64);
 
 
 
 
     while(*running){
-       
-        while(SDL_PollEvent(&input)){
-            if(input.type == SDL_QUIT){
-                *running = false;
-            }
+        SDL_PollEvent(&input);
+        if(input.type == SDL_QUIT){
+            *running = false;
         }
-        if(state[SDL_SCANCODE_0]){
-            ShowMenu = 0;
-        }
-        if(state[SDL_SCANCODE_ESCAPE]){
-            ShowMenu = 1;
-            std::cout<<"Pressed";
-        }
-
-        
-
-
+        Input();
         SDL_RenderPresent(renderer);
         SDL_RenderClear(renderer);
         if(ShowMenu == true){
           Menu.Show();
         }
-        std::cout<<ShowMenu;
+        User.Render();
         cursor.Update();
+
 
         std::cout<<SDL_GetError();
 

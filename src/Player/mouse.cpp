@@ -3,9 +3,9 @@
 #include <string>
 #include <vector>
 
-#include "../include/mouse.h"
-#include "../include/entity.h"
-#include "../include/func.h"
+#include "../../include/Game/mouse.h"
+#include "../../include/Game/entity.h"
+#include "../../include/Game/func.h"
 
 Mouse::Mouse(const char* filePath, SDL_Renderer *rendererm)
 {
