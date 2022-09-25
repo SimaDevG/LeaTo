@@ -40,7 +40,7 @@ void RenderVectorP(std::vector<Entity*> ent){
 
 
 //Changes the objects src SDL_Rect
-void Entity::ChangeSrc(std::string par, float num){
+void Entity::ChangeSrc(std::string par, int num){
     if(par == "x"){
         src->x = num;
     }
@@ -60,8 +60,8 @@ void Entity::ChangeSrc(std::string par, float num){
 
 
 
-//Changes the objects dst SDL_Rect
-void Entity::ChangeDst(std::string par, float num){
+//Changes the objects dst SDL_Rect 
+void Entity::ChangeDst(std::string par, int num){
     if(par == "x"){
         dst->x = num;
     }

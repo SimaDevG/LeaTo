@@ -12,6 +12,9 @@ public:
     int MoveX(int x);
     int MoveY(int y);
     int NxtFrame();
+    int UserRender();
 private:
     std::string usrnm;
+    int frame;
+    int ctr;
 };

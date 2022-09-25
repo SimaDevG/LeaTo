@@ -13,8 +13,8 @@ public:
 
     void Render();
 
-    void ChangeSrc(std::string par, float num);
-    void ChangeDst(std::string par, float num);
+    void ChangeSrc(std::string par, int num);
+    void ChangeDst(std::string par, int num);
 
     void ChangeWSrc(int x, int y, int w, int h);
     void ChangeWDst(int x, int y, int w, int h);

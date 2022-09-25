@@ -26,8 +26,7 @@ SDL_Event input;
 bool* running = new bool(true);
 
 //Player
-Player User("Sima", "../res/plrprttp.png", renderer);
-
+Player User("Sima", "../res/userGray.png", renderer);
 
 
 
@@ -87,22 +86,25 @@ int main(int argc, char* argv[]) {
 
     //User inits
     User.ChangeWDst(540, 360, 64, 64);
+    User.ChangeWSrc(0, 0, 64, 64);
 
 
 
 
     while(*running){
+
         SDL_PollEvent(&input);
         if(input.type == SDL_QUIT){
             *running = false;
         }
         Input();
+        User.NxtFrame();
         SDL_RenderPresent(renderer);
         SDL_RenderClear(renderer);
         if(ShowMenu == true){
           Menu.Show();
         }
-        User.Render();
+        User.UserRender();
         cursor.Update();
 
 
