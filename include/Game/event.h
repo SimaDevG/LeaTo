@@ -9,16 +9,15 @@
 class Event{
 public:
     Event();
-    Event(SDL_Renderer *renderer, SDL_Rect SiPl, std::vector <Entity*> entities);
+    Event(SDL_Renderer *renderer, std::vector <Entity*> entities);
     void AddMouse(Mouse *M);
     void AddEntity(Entity *entity);
-    void Show();
-    void RenderLoop();
-    void Input(bool *running);
-    void Window(int num);
+    std::vector <Entity*> ReturnEntities();
+    Entity* ReturnEntity(int num);
+    int Show();
+
 private:
     SDL_Renderer *renderer;
-    SDL_Rect SiPl;
     std::vector <Entity*> entities;
     Mouse *M;
     SDL_Event* event;
