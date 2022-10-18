@@ -3,8 +3,15 @@
 #include <iostream>
 #include <vector>
 
-#include "../../include/Game/entity.h"
-#include "../../include/Game/func.h"
+#include "../include/block.h"
+#include "../include/button.h"
+#include "../include/entity.h"
+#include "../include/event.h"
+#include "../include/func.h"
+#include "../include/mouse.h"
+#include "../include/player.h"
+
+
 
 SDL_Texture* loadIMG(const char* filepath, SDL_Renderer* renderer){
     SDL_Texture* texture = NULL;
@@ -31,4 +38,13 @@ void init(SDL_Window *window, SDL_Renderer *renderer){
         std::cout<<"Renderer is NULL: "<<SDL_GetError();
     }
 
+}
+
+bool checkCollision(SDL_Rect *rect1, SDL_Rect *rect2){
+    if(SDL_HasIntersection(rect1, rect2)){
+        return 1;
+    }
+    else{
+        return 0;
+    }
 }

@@ -4,6 +4,14 @@
 #include <string>
 #include <vector>
 
+#include "../include/block.h"
+#include "../include/button.h"
+#include "../include/event.h"
+#include "../include/func.h"
+#include "../include/mouse.h"
+#include "../include/player.h"
+
+
 class Entity{
 public:
     Entity(const char* filePath, SDL_Renderer *renderer);
@@ -26,6 +34,8 @@ public:
     SDL_Rect* ReturnSrc();
     SDL_Rect* ReturnDst();
     SDL_Renderer* ReturnRenderer();
+
+    int CheckCollision(Entity *Entity);
 protected:
     SDL_Rect* src = new SDL_Rect { 0, 0, 1920, 1080 };
     SDL_Rect* dst = new SDL_Rect { 0, 0, 1920, 1080 };
@@ -36,3 +46,4 @@ protected:
 
 void RenderVector(std::vector<Entity> ent);
 void RenderVectorP(std::vector<Entity*> ent);
+void RenderVectorBlocks(std::vector<Block*> blk);

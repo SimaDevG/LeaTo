@@ -4,7 +4,13 @@
 #include <string>
 #include <vector>
 
-#include "entity.h"
+#include "../include/block.h"
+#include "../include/button.h"
+#include "../include/entity.h"
+#include "../include/event.h"
+#include "../include/func.h"
+#include "../include/player.h"
+
 
 class Mouse : public Entity{
 public:
@@ -13,7 +19,5 @@ public:
     SDL_Rect* GetPos();
     bool CheckPos(int x, int y);
 private:
-    SDL_Rect src;
-    SDL_Rect dst;
     SDL_Rect pos;
 };

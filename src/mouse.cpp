@@ -3,30 +3,36 @@
 #include <string>
 #include <vector>
 
-#include "../../include/Game/mouse.h"
-#include "../../include/Game/entity.h"
-#include "../../include/Game/func.h"
+#include "../include/block.h"
+#include "../include/button.h"
+#include "../include/entity.h"
+#include "../include/event.h"
+#include "../include/func.h"
+#include "../include/mouse.h"
+#include "../include/player.h"
+
+
 
 Mouse::Mouse(const char* filePath, SDL_Renderer *rendererm)
 {
     renderer = rendererm;
     texture = loadIMG(filePath, renderer);
-    src.x = 0;
-    src.y = 0;
-    src.w = 64;
-    src.h = 64;
+    src->x = 0;
+    src->y = 0;
+    src->w = 64;
+    src->h = 64;
 
-    dst.x = 0;
-    dst.y = 0;
-    dst.w = 25;
-    dst.h = 25;
+    dst->x = 0;
+    dst->y = 0;
+    dst->w = 25;
+    dst->h = 25;
 
     SDL_ShowCursor(false);
 }
 
 void Mouse::Update(){
-    SDL_GetMouseState(&dst.x, &dst.y);
-    SDL_RenderCopy(renderer, texture, &src, &dst);
+    SDL_GetMouseState(&dst->x, &dst->y);
+    SDL_RenderCopy(renderer, texture, src, dst);
 }
 
 SDL_Rect* Mouse::GetPos(){

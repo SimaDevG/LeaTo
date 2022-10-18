@@ -3,9 +3,16 @@
 #include <string>
 #include <vector>
 
-#include "../../include/Game/entity.h"
-#include "../../include/Player/player.h"
-#include "../../include/Game/func.h"
+#include "../include/block.h"
+#include "../include/button.h"
+#include "../include/entity.h"
+#include "../include/event.h"
+#include "../include/func.h"
+#include "../include/mouse.h"
+#include "../include/player.h"
+
+
+
 
 Player::Player(std::string username, const char *filePath, SDL_Renderer *rndrr)
     :usrnm(username)
@@ -23,16 +30,16 @@ int Player::MoveY(int ychange){
     return 1;
 }
 int Player::NxtFrame(){
-    if(ctr < 880){
+    if(ctr < 22){
         ctr++;
     }
     else{
         ctr = 0;
     }
-    if(0 < ctr && ctr < 200) frame = 0;
-    if(200 < ctr && ctr < 400) frame = 1;
-    if(400 < ctr && ctr < 600) frame = 2;
-    if(600 < ctr && ctr < 800) frame = 3;
+    if(0 < ctr && ctr < 5) frame = 0;
+    if(5 < ctr && ctr < 10) frame = 1;
+    if(10 < ctr && ctr < 15) frame = 2;
+    if(15 < ctr && ctr < 20) frame = 3;
     return 1;
 
 }

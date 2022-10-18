@@ -2,8 +2,17 @@
 #include <iostream>
 #include <string>
 
-#include "../../include/Game/entity.h"
-#include "../../include/Game/func.h"
+#include "../include/block.h"
+#include "../include/button.h"
+#include "../include/entity.h"
+#include "../include/event.h"
+#include "../include/func.h"
+#include "../include/mouse.h"
+#include "../include/player.h"
+
+
+
+
 
 //Creating the texture/entity
 Entity::Entity(const char* filePath, SDL_Renderer *renderer)
@@ -34,6 +43,12 @@ void RenderVector(std::vector<Entity> ent){
 void RenderVectorP(std::vector<Entity*> ent){
     for(Entity* e : ent){
         e->Render();
+    }
+}
+
+void RenderVectorBlocks(std::vector<Block*> blk){
+    for(Block * b : blk){
+        b->Render();
     }
 }
 
@@ -120,4 +135,13 @@ SDL_Rect* Entity::ReturnDst(){
 
 SDL_Renderer* Entity::ReturnRenderer(){
     return renderer;
+}
+
+int Entity::CheckCollision(Entity *Entity){
+    if(checkCollision(Entity->ReturnDst(), ReturnDst()) == 1){
+            return 1;
+    }
+    else{
+        return 0;
+    }
 }

@@ -1,2 +1,2 @@
 default:
-	g++ ../src/Game/entity.cpp ../src/Game/event.cpp ../src/Player/mouse.cpp ../src/Game/func.cpp ../src/Player/player.cpp ../src/main.cpp  -o LeaTo.exe -O2 -Wall -Wno-missing-braces -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -mwindows
+	g++ ../src/entity.cpp ../src/block.cpp ../src/button.cpp ../src/event.cpp ../src/mouse.cpp ../src/func.cpp ../src/player.cpp ../src/main.cpp  -o LeaTo.exe -O2 -Wall -Wno-missing-braces -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -mwindows

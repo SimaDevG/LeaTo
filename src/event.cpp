@@ -4,9 +4,17 @@
 #include <vector>
 
 
-#include "../../include/Game/event.h"
-#include "../../include/Game/mouse.h"
-#include "../../include/Game/entity.h"
+#include "../include/block.h"
+#include "../include/button.h"
+#include "../include/entity.h"
+#include "../include/event.h"
+#include "../include/func.h"
+#include "../include/mouse.h"
+#include "../include/player.h"
+
+
+
+
 
 
 
