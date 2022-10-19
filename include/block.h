@@ -5,13 +5,11 @@
 #include <vector>
 
 
-#include "../include/block.h"
-#include "../include/button.h"
-#include "../include/entity.h"
-#include "../include/event.h"
-#include "../include/func.h"
-#include "../include/mouse.h"
-#include "../include/player.h"
+#include "block.h"
+#include "button.h"
+#include "entity.h"
+#include "event.h"
+#include "mouse.h"
 
 
 class Block : public Entity{
@@ -26,7 +24,7 @@ private:
 
     Event* UseMenu;
     bool MenuinUse = false;
-
+    int ctr = 0;
     int frame = 0;
 
 };

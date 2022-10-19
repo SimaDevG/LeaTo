@@ -4,12 +4,7 @@
 #include <string>
 #include <vector>
 
-#include "../include/block.h"
-#include "../include/button.h"
-#include "../include/entity.h"
-#include "../include/event.h"
-#include "../include/func.h"
-#include "../include/player.h"
+#include "entity.h"
 
 
 class Mouse : public Entity{

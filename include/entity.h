@@ -4,13 +4,8 @@
 #include <string>
 #include <vector>
 
-#include "../include/block.h"
-#include "../include/button.h"
-#include "../include/event.h"
-#include "../include/func.h"
-#include "../include/mouse.h"
-#include "../include/player.h"
 
+#include "func.h"
 
 class Entity{
 public:
