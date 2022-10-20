@@ -57,3 +57,9 @@ int Block::UseBlock(Player *User){
     }
     return 1;
 }
+
+void RenderVectorBlocks(std::vector<Block*> blk){
+    for(Block * b : blk){
+        b->Render();
+    }
+}

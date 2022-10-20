@@ -10,6 +10,7 @@
 #include "entity.h"
 #include "event.h"
 #include "mouse.h"
+#include "player.h"
 
 
 class Block : public Entity{
@@ -28,3 +29,5 @@ private:
     int frame = 0;
 
 };
+
+void RenderVectorBlocks(std::vector<Block*> blk);

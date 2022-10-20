@@ -41,4 +41,3 @@ protected:
 
 void RenderVector(std::vector<Entity> ent);
 void RenderVectorP(std::vector<Entity*> ent);
-void RenderVectorBlocks(std::vector<Block*> blk);

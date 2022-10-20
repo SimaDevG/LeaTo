@@ -46,12 +46,6 @@ void RenderVectorP(std::vector<Entity*> ent){
     }
 }
 
-void RenderVectorBlocks(std::vector<Block*> blk){
-    for(Block * b : blk){
-        b->Render();
-    }
-}
-
 
 
 //Changes the objects src SDL_Rect

@@ -68,25 +68,24 @@ int HotbarInit(){
 
 //Learning Pods
 std::vector <Block*> LearningPods;
-SDL_Rect *buttonPos = new SDL_Rect{365, 377, 64, 64};
-Button *LPButton = new Button(buttonPos, "../res/UseIcon.png", renderer, state, SDL_SCANCODE_E, input);
-Entity *LPMenuBg = new Entity("../res/blue.png", renderer);
-std::vector <Entity*> LearningPodEntities;
-Event *LearningPodMenu = new Event(renderer, LearningPodEntities);
-
-Block *LearningPod = new Block("../res/LearningPod.png", renderer, LPButton, LearningPodMenu);
 
 int LearningPodInit(){
-    for(int ctr1 = 0; ctr1<7; ctr1++){
-        LearningPods.push_back(new Block("../res/LearningPod.png", renderer, LPButton, LearningPodMenu));
-        LearningPods[ctr1]->ChangeWDst(WindowWidth * (0.1 * ctr1), WindowHeight * 0.2, 128, 128);
+    for(int PCtr = 1; PCtr < 3; PCtr++){
+        Button *tempButton = new Button(new SDL_Rect {361 * PCtr, 383, 64, 64}, "../res/UseIcon.png", renderer, state, SDL_SCANCODE_E, input);
+        tempButton->AddMouse(cursor);
+
+        Entity *tempMenuBG = new Entity("../res/blue.png", renderer); tempMenuBG->ChangeWDst(233 * PCtr, 233, 333, 333);
+        std::vector <Entity*> *tempMenuEntities = new std::vector <Entity*>;
+        Event *tempMenu = new Event(renderer, *tempMenuEntities);
+        tempMenu->AddEntity(tempMenuBG);
+
+        Block *TempBlock = new Block("../res/LearningPod.png", renderer, tempButton, tempMenu);
+        TempBlock->ChangeWDst(333 * PCtr, 333, 128, 128);
+        TempBlock->ChangeWSrc(0, 0, 128, 128);
+
+        LearningPods.push_back(TempBlock);
     }
-    LearningPodMenu->AddEntity(LPMenuBg);
-    LPMenuBg->ChangeWDst(233, 233, 333, 333);
-    LPButton->AddMouse(cursor);
-    LearningPod->ChangeWSrc(0, 0, 128, 128);
-    LearningPod->ChangeWDst(333, 333, 128, 128);
-    return 1;
+    return 3;
 }
 
 
@@ -149,7 +148,7 @@ int main(int argc, char* argv[]) {
     HotbarInit();
 
     //Learning Pod Inits
-    LearningPodInit();
+    std::cout<<LearningPodInit();
 
     //User inits
     User->ChangeWDst(100, 100, 64, 64);
@@ -167,16 +166,20 @@ int main(int argc, char* argv[]) {
 
         Input();
         User->NxtFrame();
-        LearningPod->BlockAnimation();
 
         SDL_RenderPresent(renderer);
         SDL_RenderClear(renderer);
-        LearningPod->Render();
-        LearningPod->UseBlock(User);
+
+        for(Block* LP_Render : LearningPods){
+            LP_Render->UseBlock(User);
+            LP_Render->Render();
+            LP_Render->BlockAnimation();
+        }
+
         if(ShowMenu == true){
           Menu.Show();
         }
-
+        Hotbar.Show();
 
 
         User->UserRender();
