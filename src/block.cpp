@@ -58,6 +58,23 @@ int Block::UseBlock(Player *User){
     return 1;
 }
 
+int Block::AddBlockNumber(int num){
+    BlockNumber = num;
+    return 1;
+}
+
+int Block::ReturnBlockNumber(){
+    return BlockNumber;
+}
+
+Button* Block::ReturnBlockButton(){
+    return BlockButton;
+}
+
+Event* Block::ReturnBlockEvent(){
+    return UseMenu;
+}
+
 void RenderVectorBlocks(std::vector<Block*> blk){
     for(Block * b : blk){
         b->Render();

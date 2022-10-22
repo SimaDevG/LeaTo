@@ -19,14 +19,24 @@ public:
     int BlockAnimation();
     int UseBlock(Player *User);
 
+    int AddBlockNumber(int num);
+    int ReturnBlockNumber();
+    
+    Button* ReturnBlockButton();
+
+    Event* ReturnBlockEvent();
+
 private:
     SDL_Texture *tex;
+
     Button* BlockButton;
 
     Event* UseMenu;
+
     bool MenuinUse = false;
     int ctr = 0;
     int frame = 0;
+    int BlockNumber;
 
 };
 

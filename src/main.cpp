@@ -18,14 +18,23 @@
 3. Fix Main Menu Button
 4. Fix LearningPods focus mod
 5. Main Communication Table
-6. Looks*/
+6. Looks
+7. Networking
+Set so that if window size gets to a sudden point, it will go down even more, so that only the user is seen with the learning pod, including the timer.
+
+Learningpod timer for study sessions
+
+
+*/
+
+
 
 /*git remote -v to go to website repo*/
 
 
 //SDL Initializations
 int *WindowWidth =  new int(1920);
-int *WindowHeight = new int (1080);
+int *WindowHeight = new int (1070);
 SDL_Surface *logo;
 SDL_Window* window = SDL_CreateWindow( "LeaTo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, *WindowWidth, *WindowHeight, SDL_WINDOW_RESIZABLE);
 SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC);
@@ -55,7 +64,18 @@ Entity *MenuBg = new Entity("../res/bg.png", renderer);
 int MenuWidth = 600;
 int MenuHeight = 333;
 
-SDL_Rect SizePlace_Menu = {0, 0, 600, 600};
+int GlobalInit(){
+
+    init(window, renderer);
+    SDL_SetWindowMinimumSize(window, 300, 364);
+
+    //Window logo
+    logo = IMG_Load("../res/logo.png");
+    SDL_SetWindowIcon(window, logo);
+
+
+    return 1;
+}
 
 int MenuInit(){
     MenuBg->ChangeWSrc(0, 0, 100, 100);
@@ -66,12 +86,12 @@ int MenuInit(){
 
 
 //Hotbar
-Event Hotbar(renderer, Hotbar_Entities);
+Event *Hotbar = new Event(renderer, Hotbar_Entities);
 int HotbarInit(){
     for(int box = 0; box < 3; box++){
-        Hotbar.AddEntity(new Entity("../res/hotbarbox.png", renderer));
-        Hotbar.ReturnEntity(box)->ChangeWSrc(0, 0, 64, 64);
-        Hotbar.ReturnEntity(box)->ChangeWDst(444 + 64 * box, 656, 64, 64);
+        Hotbar->AddEntity(new Entity("../res/hotbarbox.png", renderer));
+        Hotbar->ReturnEntity(box)->ChangeWSrc(0, 0, 64, 64);
+        Hotbar->ReturnEntity(box)->ChangeWDst(444 + 64 * box, 756, 64, 64);
     }
     return 1;
 }
@@ -81,14 +101,13 @@ std::vector <Block*> LearningPods;
 
 int LearningPodInit(){
     int ButtonPosX;
-    int ButtonPosY;
     int MenuPosX;
     int BlockPos;
-    for(int PCtr = 1; PCtr < 5 ; PCtr++){
-        BlockPos = (*WindowWidth * (0.15 * PCtr)) + *WindowWidth * 0.5;
+    for(int BlNr = 1; BlNr < 5 ; BlNr++){
+        if(BlNr == 1) BlockPos = (*WindowWidth * 0.1);
+        else BlockPos = (*WindowWidth * (0.12 * BlNr));
         ButtonPosX = BlockPos + 32;
         MenuPosX = BlockPos - 86;
-        std::cout<<BlockPos<<"\n";
 
         Button *tempButton = new Button(new SDL_Rect {ButtonPosX, 383, 64, 64}, "../res/UseIcon.png", renderer, state, SDL_SCANCODE_E, input);
         tempButton->AddMouse(cursor);
@@ -100,6 +119,7 @@ int LearningPodInit(){
 
         Block *TempBlock = new Block("../res/LearningPod.png", renderer, tempButton, tempMenu);
         TempBlock->ChangeWDst(BlockPos, 333, 128, 128);
+        TempBlock->AddBlockNumber(BlNr);
         TempBlock->ChangeWSrc(0, 0, 128, 128);
 
         LearningPods.push_back(TempBlock);
@@ -133,32 +153,80 @@ int Input(){
     //Hotbar
     if(state[SDL_SCANCODE_1]){
         for(int box = 0; box < 3; ++box){
-            Hotbar.ReturnEntity(box)->ChangeSrc("x", 0);
+            Hotbar->ReturnEntity(box)->ChangeSrc("x", 0);
         }
-        Hotbar.ReturnEntity(0)->ChangeSrc("x", 64);
+        Hotbar->ReturnEntity(0)->ChangeSrc("x", 64);
     }
     if(state[SDL_SCANCODE_2]){
         for(int box = 0; box < 3; ++box){
-            Hotbar.ReturnEntity(box)->ChangeSrc("x", 0);
+            Hotbar->ReturnEntity(box)->ChangeSrc("x", 0);
         }
-        Hotbar.ReturnEntity(1)->ChangeSrc("x", 64);
+        Hotbar->ReturnEntity(1)->ChangeSrc("x", 64);
     }
     if(state[SDL_SCANCODE_3]){
         for(int box = 0; box < 3; ++box){
-            Hotbar.ReturnEntity(box)->ChangeSrc("x", 0);
+            Hotbar->ReturnEntity(box)->ChangeSrc("x", 0);
         }
-        Hotbar.ReturnEntity(2)->ChangeSrc("x", 64);
+        Hotbar->ReturnEntity(2)->ChangeSrc("x", 64);
     }
 
     return 1;
 
 }
 
+int ProportionsUpdate(){
+    int BlockUpdateX;
+    int BlockUpdateY;
+    int HotbarBoxCtr = 0;
+    
+    //Getting current window size
+    SDL_GetWindowSize(window, WindowWidth, WindowHeight);
+
+    //Proportions
+    for(Block* Block : LearningPods){
+        BlockUpdateX = (*WindowWidth * (0.12 * Block->ReturnBlockNumber()));
+        BlockUpdateY = *WindowHeight * 0.3;
+
+        Block->ChangeWDst(BlockUpdateX, BlockUpdateY, 128, 128);
+
+        Block->ReturnBlockButton()->ChangeWDst(BlockUpdateX + 32, BlockUpdateY + 50, 64, 64);
+
+        Block->ReturnBlockEvent()->ReturnEntities()[0]->ChangeWDst(BlockUpdateX - 86, BlockUpdateY - 100, 300, 300);
+
+    }
+
+    //Hotbar 
+    for(Entity *HotbarBox : Hotbar->ReturnEntities()){
+            HotbarBox->ChangeWDst((*WindowWidth* 0.45 + (64 * HotbarBoxCtr)), *WindowHeight * 0.9, 64, 64);
+            HotbarBoxCtr++;
+    }
+
+
+    if(*WindowWidth < 1775 && *WindowHeight < 1000){
+        SDL_SetWindowSize(window, 300, 364);
+    }
+
+    else if(*WindowWidth < 1775){
+        SDL_SetWindowMinimumSize(window, 1775, 364);
+    }
+
+    else if(*WindowHeight < 1000){
+        SDL_SetWindowMinimumSize(window, 300, 1000);
+    }
+    else{
+        SDL_SetWindowMinimumSize(window, 300, 364);
+    }
+
+
+
+
+    return 1;
+}
+
 int main(int argc, char* argv[]) {
-    //Other initializations
-    logo = IMG_Load("../res/logo.png");
-    SDL_SetWindowIcon(window, logo);
-    init(window, renderer);
+
+    //Global Inits
+    GlobalInit();
 
     //Menu Inits
     MenuInit();
@@ -177,6 +245,7 @@ int main(int argc, char* argv[]) {
 
 
     while(*running){
+        std::cout<<*WindowWidth<<"  "<<*WindowHeight<<"\n";
         while(SDL_PollEvent(input)){
             if(input->type == SDL_QUIT){
                 *running = false;
@@ -184,6 +253,7 @@ int main(int argc, char* argv[]) {
         }
 
         Input();
+        ProportionsUpdate();
         User->NxtFrame();
 
         SDL_RenderPresent(renderer);
@@ -194,7 +264,7 @@ int main(int argc, char* argv[]) {
         if(ShowMenu == true){
           Menu.Show();
         }
-        Hotbar.Show();
+        Hotbar->Show();
 
         User->UserRender();
         for(Block* LP_Render : LearningPods){
