@@ -12,12 +12,22 @@
 #include "../include/player.h"
 
 
+/*To Do
+1. Get Right Proportions On Learningpods
+2. Fix Hotbar
+3. Fix Main Menu Button
+4. Fix LearningPods focus mod
+5. Main Communication Table
+6. Looks*/
+
+/*git remote -v to go to website repo*/
+
 
 //SDL Initializations
-int WindowWidth = 1080;
-int WindowHeight = 720;
+int *WindowWidth =  new int(1920);
+int *WindowHeight = new int (1080);
 SDL_Surface *logo;
-SDL_Window* window = SDL_CreateWindow( "LeaTo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WindowWidth, WindowHeight, SDL_WINDOW_RESIZABLE);
+SDL_Window* window = SDL_CreateWindow( "LeaTo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, *WindowWidth, *WindowHeight, SDL_WINDOW_RESIZABLE);
 SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC);
 
 //LeaTo variables
@@ -70,17 +80,26 @@ int HotbarInit(){
 std::vector <Block*> LearningPods;
 
 int LearningPodInit(){
-    for(int PCtr = 1; PCtr < 3; PCtr++){
-        Button *tempButton = new Button(new SDL_Rect {361 * PCtr, 383, 64, 64}, "../res/UseIcon.png", renderer, state, SDL_SCANCODE_E, input);
+    int ButtonPosX;
+    int ButtonPosY;
+    int MenuPosX;
+    int BlockPos;
+    for(int PCtr = 1; PCtr < 5 ; PCtr++){
+        BlockPos = (*WindowWidth * (0.15 * PCtr)) + *WindowWidth * 0.5;
+        ButtonPosX = BlockPos + 32;
+        MenuPosX = BlockPos - 86;
+        std::cout<<BlockPos<<"\n";
+
+        Button *tempButton = new Button(new SDL_Rect {ButtonPosX, 383, 64, 64}, "../res/UseIcon.png", renderer, state, SDL_SCANCODE_E, input);
         tempButton->AddMouse(cursor);
 
-        Entity *tempMenuBG = new Entity("../res/blue.png", renderer); tempMenuBG->ChangeWDst(233 * PCtr, 233, 333, 333);
+        Entity *tempMenuBG = new Entity("../res/blue.png", renderer);   tempMenuBG->ChangeWDst(MenuPosX, 233, 300, 300);
         std::vector <Entity*> *tempMenuEntities = new std::vector <Entity*>;
         Event *tempMenu = new Event(renderer, *tempMenuEntities);
         tempMenu->AddEntity(tempMenuBG);
 
         Block *TempBlock = new Block("../res/LearningPod.png", renderer, tempButton, tempMenu);
-        TempBlock->ChangeWDst(333 * PCtr, 333, 128, 128);
+        TempBlock->ChangeWDst(BlockPos, 333, 128, 128);
         TempBlock->ChangeWSrc(0, 0, 128, 128);
 
         LearningPods.push_back(TempBlock);
@@ -170,19 +189,21 @@ int main(int argc, char* argv[]) {
         SDL_RenderPresent(renderer);
         SDL_RenderClear(renderer);
 
-        for(Block* LP_Render : LearningPods){
-            LP_Render->UseBlock(User);
-            LP_Render->Render();
-            LP_Render->BlockAnimation();
-        }
+
 
         if(ShowMenu == true){
           Menu.Show();
         }
         Hotbar.Show();
 
-
         User->UserRender();
+        for(Block* LP_Render : LearningPods){
+            LP_Render->Render();
+            LP_Render->BlockAnimation();
+            LP_Render->UseBlock(User);
+        }
+
+
         cursor->Update();
         std::cout<<SDL_GetError();
 

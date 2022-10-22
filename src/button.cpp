@@ -31,7 +31,7 @@ bool Button::Pressed(SDL_Rect *rect, bool change){
     if(state[activationKey]){
         if(SDL_GetTicks64() >= timeout){
             change = !change;
-            timeout = SDL_GetTicks64() + 300;
+            timeout = SDL_GetTicks64() + 100;
         }
     }
     return change;
