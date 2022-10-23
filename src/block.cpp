@@ -25,23 +25,34 @@ Block::Block(const char *filePath, SDL_Renderer *rendrr, Button *Btn, Event *Use
 }
 
 int Block::BlockAnimation(){
-    if(ctr < 22){
+    int change;
+    CtrForChange = 100 / AnimationFrames;
+
+    if(ctr < 100){
         ctr++;
     }
     else{
         ctr = 0;
     }
-    if(0 < ctr && ctr < 5) frame = 0;
-    if(5 < ctr && ctr < 10) frame = 1;
-    if(10 < ctr && ctr < 15) frame = 2;
-    if(15 < ctr && ctr < 20) frame = 3;
-
-
-    int change = frame * 128;
+    int test = CtrForChange * frame;
+    std::cout<<test<<"\n";
+    if(test > ctr){
+        frame++;
+    }
+    if(frame == AnimationFrames && ctr == 100){
+        frame = 1;
+    }
+    std::cout<<"Counter = "<< ctr <<"   Frame = "<< frame << "\n";
+    change = (frame - 1) * 128;
     ChangeSrc("x", change);
     Render();
     return 1;
 
+}
+
+int Block::AddAnimationFrames(int num){
+    AnimationFrames = num;
+    return 1;
 }
 
 int Block::UseBlock(Player *User){

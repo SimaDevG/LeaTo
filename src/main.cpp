@@ -33,8 +33,8 @@ Learningpod timer for study sessions
 
 
 //SDL Initializations
-int *WindowWidth =  new int(1920);
-int *WindowHeight = new int (1070);
+int *WindowWidth =  new int(1775);
+int *WindowHeight = new int (1000);
 SDL_Surface *logo;
 SDL_Window* window = SDL_CreateWindow( "LeaTo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, *WindowWidth, *WindowHeight, SDL_WINDOW_RESIZABLE);
 SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC);
@@ -121,6 +121,7 @@ int LearningPodInit(){
         TempBlock->ChangeWDst(BlockPos, 333, 128, 128);
         TempBlock->AddBlockNumber(BlNr);
         TempBlock->ChangeWSrc(0, 0, 128, 128);
+        TempBlock->AddAnimationFrames(4);
 
         LearningPods.push_back(TempBlock);
     }
@@ -235,7 +236,7 @@ int main(int argc, char* argv[]) {
     HotbarInit();
 
     //Learning Pod Inits
-    std::cout<<LearningPodInit();
+    LearningPodInit();
 
     //User inits
     User->ChangeWDst(100, 100, 64, 64);
@@ -245,7 +246,6 @@ int main(int argc, char* argv[]) {
 
 
     while(*running){
-        std::cout<<*WindowWidth<<"  "<<*WindowHeight<<"\n";
         while(SDL_PollEvent(input)){
             if(input->type == SDL_QUIT){
                 *running = false;
