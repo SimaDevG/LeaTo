@@ -13,12 +13,13 @@
 
 
 /*To Do
-- Background
-- Fix Main Menu Button
-- Fix LearningPods focus mod
-- Main Communication Table
-- Looks
-- Networking
+1. Get Right Proportions On Learningpods
+2. Fix Hotbar
+3. Fix Main Menu Button
+4. Fix LearningPods focus mod
+5. Main Communication Table
+6. Looks
+7. Networking
 Set so that if window size gets to a sudden point, it will go down even more, so that only the user is seen with the learning pod, including the timer.
 
 Learningpod timer for study sessions
@@ -40,6 +41,7 @@ SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYN
 
 //LeaTo variables
 const Uint8 *state = SDL_GetKeyboardState(NULL);
+bool ShowMenu = false;
 SDL_Event *input = new SDL_Event;
 bool* running = new bool(true);
 
@@ -48,6 +50,7 @@ Player *User = new Player("Sima", "../res/userGray.png", renderer);
 
 //Vectors
 std::vector <Entity*> Entities;
+std::vector <Entity*> Menu_Entities; //Menu (ESC)
 std::vector <Entity*> Hotbar_Entities; //Hotbar (1, 2, 3, 4)
 
 //Resources
@@ -55,8 +58,11 @@ Entity *UseIcon = new Entity("../res/UseIcon.png", renderer);
 Mouse *cursor = new Mouse("../res/cursor.png", renderer);
 Entity *Bg = new Entity("../res/bg.png", renderer);
 
-//Background & Main Menu
-Block *Background = new Block("../res/PurpleBg.png", renderer, new Button(new SDL_Rect {}, "../res/UseIcon.png", renderer, state, SDL_SCANCODE_ESCAPE, input), new Event(renderer, std::vector <Entity*> {}));
+//Menu
+Event Menu(renderer, Menu_Entities);
+Entity *MenuBg = new Entity("../res/bg.png", renderer);
+int MenuWidth = 600;
+int MenuHeight = 333;
 
 int GlobalInit(){
 
@@ -68,13 +74,15 @@ int GlobalInit(){
     SDL_SetWindowIcon(window, logo);
 
 
-    Background->AddAnimationFrames(4);
-    Background->ChangeDst("x", 0);
-    Background->ChangeSrc("y", 0);
-    Background->PixelWidthBl(1920);
     return 1;
 }
 
+int MenuInit(){
+    MenuBg->ChangeWSrc(0, 0, 100, 100);
+    MenuBg->ChangeWDst(374, 33, MenuWidth, MenuHeight);
+    Menu.AddEntity(MenuBg);
+    return 1;
+}
 
 
 //Hotbar
@@ -123,6 +131,13 @@ int LearningPodInit(){
 
 
 int Input(){
+    //Menu
+    if(state[SDL_SCANCODE_SPACE]){
+        ShowMenu = 0;
+    }
+    if(state[SDL_SCANCODE_ESCAPE]){
+        ShowMenu = 1;
+    }
     //Movement
     if(state[SDL_SCANCODE_D]){
         User->MoveX(3);
@@ -214,6 +229,9 @@ int main(int argc, char* argv[]) {
     //Global Inits
     GlobalInit();
 
+    //Menu Inits
+    MenuInit();
+
     //Hotbar Inits
     HotbarInit();
 
@@ -241,10 +259,13 @@ int main(int argc, char* argv[]) {
         SDL_RenderPresent(renderer);
         SDL_RenderClear(renderer);
 
-        Background->Render();
-        Background->BlockAnimation(0);
 
+
+        if(ShowMenu == true){
+          Menu.Show();
+        }
         Hotbar->Show();
+
         User->UserRender();
         for(Block* LP_Render : LearningPods){
             LP_Render->Render();

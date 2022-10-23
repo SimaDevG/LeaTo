@@ -70,7 +70,7 @@ int Block::BlockAnimation(int num){
     }
     if(frame == 0) frame = 1;
     std::cout << "Frame = " << frame << "   Counter = " << ctr << "\n";
-    change = (frame - 1) * PixelWidth;
+    change = (frame - 1) * 128;
     ChangeSrc("x", change);
     Render();
     return 1;
@@ -113,10 +113,6 @@ Event* Block::ReturnBlockEvent(){
     return UseMenu;
 }
 
-int Block::PixelWidthBl(int num){
-    PixelWidth = num;
-    return 1;
-}
 void RenderVectorBlocks(std::vector<Block*> blk){
     for(Block * b : blk){
         b->Render();

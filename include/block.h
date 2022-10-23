@@ -27,8 +27,6 @@ public:
 
     Event* ReturnBlockEvent();
 
-    int PixelWidthBl(int num);
-
 private:
     SDL_Texture *tex;
 
@@ -42,9 +40,9 @@ private:
     int BlockNumber;
 
     bool state = false;
+
     int AnimationFrames;
     int CtrForChange;
-    int PixelWidth;
 
 };
 
