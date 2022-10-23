@@ -121,7 +121,7 @@ int LearningPodInit(){
         TempBlock->ChangeWDst(BlockPos, 333, 128, 128);
         TempBlock->AddBlockNumber(BlNr);
         TempBlock->ChangeWSrc(0, 0, 128, 128);
-        TempBlock->AddAnimationFrames(4);
+        TempBlock->AddAnimationFrames(7);
 
         LearningPods.push_back(TempBlock);
     }
@@ -269,7 +269,7 @@ int main(int argc, char* argv[]) {
         User->UserRender();
         for(Block* LP_Render : LearningPods){
             LP_Render->Render();
-            LP_Render->BlockAnimation();
+            LP_Render->BlockAnimation(1);
             LP_Render->UseBlock(User);
         }
 

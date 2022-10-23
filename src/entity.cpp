@@ -25,7 +25,9 @@ Entity::Entity(){
 
 };
 
-
+void Entity::ChangeTexture(const char* filePath){
+    texture = loadIMG(filePath, renderer);
+}
 
 //Renders out according to src and dst
 void Entity::Render(){

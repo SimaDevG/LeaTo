@@ -24,25 +24,52 @@ Block::Block(const char *filePath, SDL_Renderer *rendrr, Button *Btn, Event *Use
     renderer = rendrr;
 }
 
-int Block::BlockAnimation(){
+int Block::BlockAnimation(int num){
     int change;
     CtrForChange = 100 / AnimationFrames;
+    int max = CtrForChange * AnimationFrames;
 
-    if(ctr < 100){
+    if(ctr < max){
         ctr++;
     }
     else{
         ctr = 0;
     }
-    int test = CtrForChange * frame;
-    std::cout<<test<<"\n";
-    if(test > ctr){
+    if(num == 0){
+        int test = CtrForChange * frame;
+        if(test < ctr){
         frame++;
+        }
+        if(frame == AnimationFrames && ctr == max){
+            frame = 1;
+        }
+        std::cout<<test<< "\n";
     }
-    if(frame == AnimationFrames && ctr == 100){
-        frame = 1;
+
+
+    //Descending or ascending
+    if(num == 1){
+        int testDescending = 100 - (CtrForChange * frame);
+        int testAscending = CtrForChange * frame;
+        if(frame == AnimationFrames && ctr == max){
+            state = true;
+        }
+        else if(state){
+            if(ctr == max){
+                state = false;
+            }
+            else if(testDescending < ctr){
+                frame--;
+            }
+        }
+        else if(!state){
+            if(testAscending < ctr){
+                frame++;
+            }   
+        }
     }
-    std::cout<<"Counter = "<< ctr <<"   Frame = "<< frame << "\n";
+    if(frame == 0) frame = 1;
+    std::cout << "Frame = " << frame << "   Counter = " << ctr << "\n";
     change = (frame - 1) * 128;
     ChangeSrc("x", change);
     Render();

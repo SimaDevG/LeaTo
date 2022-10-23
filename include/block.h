@@ -16,7 +16,7 @@
 class Block : public Entity{
 public:
     Block(const char *filePath, SDL_Renderer *rendrr, Button *Btn, Event* UseMn);
-    int BlockAnimation();
+    int BlockAnimation(int num);
     int AddAnimationFrames(int num);
     int UseBlock(Player *User);
 
@@ -38,6 +38,8 @@ private:
     int ctr = 0;
     int frame = 1;
     int BlockNumber;
+
+    bool state = false;
 
     int AnimationFrames;
     int CtrForChange;

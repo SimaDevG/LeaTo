@@ -12,6 +12,8 @@ public:
     Entity(const char* filePath, SDL_Renderer *renderer);
     Entity();
 
+    void ChangeTexture(const char* filePath);
+
     bool Update();
 
     void Render();
