@@ -19,7 +19,7 @@
 - Main Communication Table
 - Looks
 - Networking
-Set so that if window size gets to a sudden point, it will go down even more, so that only the user is seen with the learning pod, including the timer.
+Set so that if window size gets to a sudden point, it will go down even more, so that only the Player1 is seen with the learning pod, including the timer.
 
 Learningpod timer for study sessions
 
@@ -45,7 +45,7 @@ SDL_Event *input = new SDL_Event;
 bool running = true;
 
 //Player
-Player *User = new Player("Sima", "../res/userGray.png", renderer);
+Player *Player1 = new Player("Sima", "../res/owlSpr.png", renderer);
 
 //Vectors
 std::vector <Entity*> Entities;
@@ -56,7 +56,7 @@ Entity *UseIcon = new Entity("../res/UseIcon.png", renderer);
 Mouse *cursor = new Mouse("../res/cursor.png", renderer);
 
 //Background & Main Menu
-Block *Background = new Block("../res/grass.png", renderer, new Button(new SDL_Rect {}, "../res/UseIcon.png", renderer, state, SDL_SCANCODE_ESCAPE, input), new Event(renderer, std::vector <Entity*> {}));
+Block *Background = new Block("../res/bg.png", renderer, new Button(new SDL_Rect {}, "../res/UseIcon.png", renderer, state, SDL_SCANCODE_ESCAPE, input), new Event(renderer, std::vector <Entity*> {}));
 
 int GlobalInit(){
 
@@ -69,7 +69,9 @@ int GlobalInit(){
 
 
     Background->AddAnimationFrames(1);
-    Background->ReturnBlockEvent()->AddEntity(new Entity("../res/bg.png", renderer));
+    Background->ReturnBlockEvent()->AddEntity(new Entity("../res/LPMenu.png", renderer));
+    Background->ReturnBlockEvent()->ReturnEntity(0)->ChangeWDst(100, 100, 1575, 800);
+    Background->ReturnBlockEvent()->AddButton(new Button(new SDL_Rect  {500, 500, 64, 64}, "../res/UseIcon.png", renderer, state, SDL_SCANCODE_ESCAPE, input));
     Background->ReturnBlockButton()->ModifyCooldown(150);
     return 1;
 }
@@ -103,7 +105,7 @@ int LearningPodInit(){
         Button *tempButton = new Button(new SDL_Rect {ButtonPosX, 383, 64, 64}, "../res/UseIcon.png", renderer, state, SDL_SCANCODE_E, input);
         tempButton->AddMouse(cursor);
 
-        Entity *tempMenuBG = new Entity("../res/blue.png", renderer);   tempMenuBG->ChangeWDst(MenuPosX, 233, 300, 300);
+        Entity *tempMenuBG = new Entity("../res/LPMenu.png", renderer);   tempMenuBG->ChangeWDst(MenuPosX, 233, 300, 300);
         std::vector <Entity*> *tempMenuEntities = new std::vector <Entity*>;
         Event *tempMenu = new Event(renderer, *tempMenuEntities);
         tempMenu->AddEntity(tempMenuBG);
@@ -112,7 +114,7 @@ int LearningPodInit(){
         TempBlock->ChangeWDst(BlockPos, 333, 128, 128);
         TempBlock->AddBlockNumber(BlNr);
         TempBlock->ChangeWSrc(0, 0, 128, 128);
-        TempBlock->AddAnimationFrames(7);
+        TempBlock->AddAnimationFrames(8);
 
         LearningPods.push_back(TempBlock);
     }
@@ -124,16 +126,16 @@ int LearningPodInit(){
 int Input(){
     //Movement
     if(state[SDL_SCANCODE_D]){
-        User->MoveX(3);
+        Player1->MoveX(3);
     }
     if(state[SDL_SCANCODE_A]){
-        User->MoveX(-3);
+        Player1->MoveX(-3);
     }
     if(state[SDL_SCANCODE_S]){
-        User->MoveY(3);
+        Player1->MoveY(3);
     }
     if(state[SDL_SCANCODE_W]){
-        User->MoveY(-3);
+        Player1->MoveY(-3);
     }
     //Hotbar
     if(state[SDL_SCANCODE_1]){
@@ -177,7 +179,7 @@ int ProportionsUpdate(){
 
         Block->ChangeWDst(BlockUpdateX, BlockUpdateY, 128, 128);
 
-        Block->ReturnBlockButton()->ChangeWDst(BlockUpdateX + 32, BlockUpdateY + 50, 64, 64);
+        Block->ReturnBlockButton()->ChangeWDst(BlockUpdateX + 32, BlockUpdateY + 32, 64, 64);
 
         Block->ReturnBlockEvent()->ReturnEntities()[0]->ChangeWDst(BlockUpdateX - 86, BlockUpdateY - 100, 300, 300);
 
@@ -185,7 +187,7 @@ int ProportionsUpdate(){
 
     //Hotbar 
     for(Entity *HotbarBox : Hotbar->ReturnEntities()){
-            HotbarBox->ChangeWDst((*WindowWidth* 0.45 + (64 * HotbarBoxCtr)), *WindowHeight * 0.9, 64, 64);
+            HotbarBox->ChangeWDst((*WindowWidth* 0.45 + (64 * HotbarBoxCtr)), *WindowHeight * 0.91, 64, 64);
             HotbarBoxCtr++;
     }
 
@@ -214,9 +216,9 @@ int main(int argc, char* argv[]) {
     //Learning Pod Inits
     LearningPodInit();
 
-    //User inits
-    User->ChangeWDst(100, 100, 64, 64);
-    User->ChangeWSrc(0, 0, 64, 64);
+    //Player1 inits
+    Player1->ChangeWDst(100, 100, 64, 64);
+    Player1->ChangeWSrc(0, 0, 64, 64);
 
 
 
@@ -231,23 +233,25 @@ int main(int argc, char* argv[]) {
 
         Input();
         ProportionsUpdate();
-        User->NxtFrame();
+        Player1->NxtFrame(1);
 
         SDL_RenderPresent(renderer);
         SDL_RenderClear(renderer);
-
+        
+        
+        Player1->PlayerRender();
         Background->Render();
         Background->BlockAnimation(0);
 
 
         Hotbar->Show();
-        User->UserRender();
+
         for(Block* LP_Render : LearningPods){
             LP_Render->Render();
             LP_Render->BlockAnimation(1);
-            LP_Render->UseBlock(User);
+            LP_Render->UseBlock(Player1);
         }
-        Background->UseBlock(User);
+        Background->UseBlock(Player1);
 
         cursor->Update();
         std::cout<<SDL_GetError();

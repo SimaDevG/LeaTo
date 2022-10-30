@@ -23,23 +23,69 @@ int Player::MoveY(int ychange){
     ChangeDstY(ReturnDst()->y + ychange);
     return 1;
 }
-int Player::NxtFrame(){
-    if(ctr < 22){
+int Player::NxtFrame(int num){
+    int change;
+    CtrForChange = loops / AnimationFrames;
+    int max = CtrForChange * AnimationFrames;
+
+    if(ctr < max){
         ctr++;
     }
     else{
         ctr = 0;
     }
-    if(0 < ctr && ctr < 5) frame = 0;
-    if(5 < ctr && ctr < 10) frame = 1;
-    if(10 < ctr && ctr < 15) frame = 2;
-    if(15 < ctr && ctr < 20) frame = 3;
-    return 1;
+    if(num == 0){
+        int test = CtrForChange * frame;
+        if(test < ctr){
+        frame++;
+        }
+        if(frame == AnimationFrames && ctr == max){
+            frame = 1;
+        }
+    }
 
+
+    //Descending or ascending
+    if(num == 1){
+        int testDescending = 100 - (CtrForChange * frame);
+        int testAscending = CtrForChange * frame;
+        if(frame == AnimationFrames && ctr == max){
+            state = true;
+        }
+        else if(state){
+            if(ctr == max){
+                state = false;
+            }
+            else if(testDescending < ctr){
+                frame--;
+            }
+        }
+        else if(!state){
+            if(testAscending < ctr){
+                frame++;
+            }   
+        }
+    }
+    if(frame == 0) frame = 1;
+    change = (frame - 1) * PixelWidth;
+    ChangeSrc("x", change);
+    Render();
+    return 1;
 }
-int Player::UserRender(){
+int Player::PlayerRender(){
     int change = frame * 64;
     ChangeSrc("x", change);
     Render();
     return 1;
+}
+
+void Player::ModifyAnimationFrames(int num){
+    AnimationFrames = num;
+}
+void Player::ModifyLoops(int num){
+    loops = num;
+}
+
+void Player::ModifyPixelW(int num){
+    PixelWidth = num;
 }
