@@ -6,7 +6,6 @@
 
 
 #include "entity.h"
-#include "mouse.h"
 
 class Player : public Entity{
 public:

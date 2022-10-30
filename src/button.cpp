@@ -3,13 +3,8 @@
 #include <string>
 #include <vector>
 
-#include "../include/block.h"
+
 #include "../include/button.h"
-#include "../include/entity.h"
-#include "../include/event.h"
-#include "../include/func.h"
-#include "../include/mouse.h"
-#include "../include/player.h"
 
 
 
@@ -31,8 +26,13 @@ bool Button::Pressed(SDL_Rect *rect, bool change){
     if(state[activationKey]){
         if(SDL_GetTicks64() >= timeout){
             change = !change;
-            timeout = SDL_GetTicks64() + 100;
+            timeout = SDL_GetTicks64() + Cooldown;
         }
     }
     return change;
+}
+
+bool Button::ModifyCooldown(int cooldown){
+    Cooldown = cooldown;
+    return true;
 }

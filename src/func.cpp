@@ -3,14 +3,8 @@
 #include <iostream>
 #include <vector>
 
-#include "../include/block.h"
-#include "../include/button.h"
-#include "../include/entity.h"
-#include "../include/event.h"
-#include "../include/func.h"
-#include "../include/mouse.h"
-#include "../include/player.h"
 
+#include "../include/func.h"
 
 
 SDL_Texture* loadIMG(const char* filepath, SDL_Renderer* renderer){

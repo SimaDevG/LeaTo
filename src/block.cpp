@@ -5,12 +5,6 @@
 
 
 #include "../include/block.h"
-#include "../include/button.h"
-#include "../include/entity.h"
-#include "../include/event.h"
-#include "../include/func.h"
-#include "../include/mouse.h"
-#include "../include/player.h"
 
 
 
@@ -43,7 +37,6 @@ int Block::BlockAnimation(int num){
         if(frame == AnimationFrames && ctr == max){
             frame = 1;
         }
-        std::cout<<test<< "\n";
     }
 
 
@@ -69,7 +62,6 @@ int Block::BlockAnimation(int num){
         }
     }
     if(frame == 0) frame = 1;
-    std::cout << "Frame = " << frame << "   Counter = " << ctr << "\n";
     change = (frame - 1) * PixelWidth;
     ChangeSrc("x", change);
     Render();

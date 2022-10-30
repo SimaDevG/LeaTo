@@ -6,7 +6,6 @@
 
 #include "button.h"
 #include "entity.h"
-#include "event.h"
 #include "mouse.h"
 
 class Button : public Entity{
@@ -14,6 +13,7 @@ public:
     Button(SDL_Rect *buttonPos, const char *filePath, SDL_Renderer* rendrr, const Uint8 *pressed, SDL_Scancode key, SDL_Event *event);
     int AddMouse(Mouse *M);
     bool Pressed(SDL_Rect *rectC, bool change);
+    bool ModifyCooldown (int cooldown);
 
 
 private:
@@ -22,4 +22,5 @@ private:
     SDL_Scancode activationKey;
     SDL_Event *E;
     Mouse *GlobalMouse;
+    int Cooldown = 200;
 };

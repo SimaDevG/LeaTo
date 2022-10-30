@@ -37,11 +37,12 @@ int *WindowHeight = new int (1000);
 SDL_Surface *logo;
 SDL_Window* window = SDL_CreateWindow( "LeaTo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, *WindowWidth, *WindowHeight, SDL_WINDOW_RESIZABLE);
 SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC);
-
+Uint64 start;
+Uint64 end;
 //LeaTo variables
 const Uint8 *state = SDL_GetKeyboardState(NULL);
 SDL_Event *input = new SDL_Event;
-bool* running = new bool(true);
+bool running = true;
 
 //Player
 Player *User = new Player("Sima", "../res/userGray.png", renderer);
@@ -53,25 +54,23 @@ std::vector <Entity*> Hotbar_Entities; //Hotbar (1, 2, 3, 4)
 //Resources
 Entity *UseIcon = new Entity("../res/UseIcon.png", renderer);
 Mouse *cursor = new Mouse("../res/cursor.png", renderer);
-Entity *Bg = new Entity("../res/bg.png", renderer);
 
 //Background & Main Menu
-Block *Background = new Block("../res/PurpleBg.png", renderer, new Button(new SDL_Rect {}, "../res/UseIcon.png", renderer, state, SDL_SCANCODE_ESCAPE, input), new Event(renderer, std::vector <Entity*> {}));
+Block *Background = new Block("../res/grass.png", renderer, new Button(new SDL_Rect {}, "../res/UseIcon.png", renderer, state, SDL_SCANCODE_ESCAPE, input), new Event(renderer, std::vector <Entity*> {}));
 
 int GlobalInit(){
 
     init(window, renderer);
     SDL_SetWindowMinimumSize(window, 300, 364);
-
+    SDL_SetWindowMaximumSize(window, 1775, 1000);
     //Window logo
     logo = IMG_Load("../res/logo.png");
     SDL_SetWindowIcon(window, logo);
 
 
-    Background->AddAnimationFrames(4);
-    Background->ChangeDst("x", 0);
-    Background->ChangeSrc("y", 0);
-    Background->PixelWidthBl(1920);
+    Background->AddAnimationFrames(1);
+    Background->ReturnBlockEvent()->AddEntity(new Entity("../res/bg.png", renderer));
+    Background->ReturnBlockButton()->ModifyCooldown(150);
     return 1;
 }
 
@@ -160,6 +159,9 @@ int Input(){
 
 }
 
+float ReturnFrameRate(){
+    return (end - start) / (float)SDL_GetPerformanceFrequency();
+}
 int ProportionsUpdate(){
     int BlockUpdateX;
     int BlockUpdateY;
@@ -191,14 +193,6 @@ int ProportionsUpdate(){
     if(*WindowWidth < 1775 && *WindowHeight < 1000){
         SDL_SetWindowSize(window, 300, 364);
     }
-
-    else if(*WindowWidth < 1775){
-        SDL_SetWindowMinimumSize(window, 1775, 364);
-    }
-
-    else if(*WindowHeight < 1000){
-        SDL_SetWindowMinimumSize(window, 300, 1000);
-    }
     else{
         SDL_SetWindowMinimumSize(window, 300, 364);
     }
@@ -227,10 +221,11 @@ int main(int argc, char* argv[]) {
 
 
 
-    while(*running){
+    while(running){
+        start = SDL_GetPerformanceCounter();
         while(SDL_PollEvent(input)){
             if(input->type == SDL_QUIT){
-                *running = false;
+                running = false;
             }
         }
 
@@ -244,6 +239,7 @@ int main(int argc, char* argv[]) {
         Background->Render();
         Background->BlockAnimation(0);
 
+
         Hotbar->Show();
         User->UserRender();
         for(Block* LP_Render : LearningPods){
@@ -251,11 +247,12 @@ int main(int argc, char* argv[]) {
             LP_Render->BlockAnimation(1);
             LP_Render->UseBlock(User);
         }
-
+        Background->UseBlock(User);
 
         cursor->Update();
         std::cout<<SDL_GetError();
-
+        end = SDL_GetPerformanceCounter();
+        std::cout<< 1.0f / ReturnFrameRate() << "\n";
     }
     // Close and destroy the window
         

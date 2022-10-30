@@ -9,7 +9,6 @@
 #include "button.h"
 #include "entity.h"
 #include "event.h"
-#include "mouse.h"
 #include "player.h"
 
 
@@ -42,7 +41,7 @@ private:
     int BlockNumber;
 
     bool state = false;
-    int AnimationFrames;
+    int AnimationFrames = 1;
     int CtrForChange;
     int PixelWidth;
 

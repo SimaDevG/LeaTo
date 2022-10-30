@@ -2,13 +2,7 @@
 #include <iostream>
 #include <string>
 
-#include "../include/block.h"
-#include "../include/button.h"
 #include "../include/entity.h"
-#include "../include/event.h"
-#include "../include/func.h"
-#include "../include/mouse.h"
-#include "../include/player.h"
 
 
 

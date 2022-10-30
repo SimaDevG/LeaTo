@@ -4,13 +4,9 @@
 #include <vector>
 
 
-#include "../include/block.h"
-#include "../include/button.h"
-#include "../include/entity.h"
+
 #include "../include/event.h"
-#include "../include/func.h"
-#include "../include/mouse.h"
-#include "../include/player.h"
+
 
 
 
@@ -52,7 +48,20 @@ int Event::Show(){
             std::cout<<"SDL didn't render out at Event::Show. SDL_Error: "<< SDL_GetError();
         }
     }
+    for(Button* b : buttons){
+        if((SDL_RenderCopy(b->ReturnRenderer(), b->ReturnTex(), b->ReturnSrc(), b->ReturnDst())!= 0)){
+            std::cout<<"SDL didn't render out at Event::Show. SDL_Error: "<< SDL_GetError();
+        }
+    }
     return 1;
 }
 
+void Event::AddButton(Button *buttonAdd){
+    buttons.push_back(buttonAdd);
+}
 
+void Event::AddButtonV(std::vector <Button*> buttonVector){
+    for(Button *beAddedButtons : buttonVector){
+        buttons.push_back(beAddedButtons);
+    }
+}
