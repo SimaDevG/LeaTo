@@ -1,9 +1,3 @@
-#include <SDL2/SDL.h>
-#include <iostream>
-#include <string>
-#include <vector>
-
-
 #include "../include/button.h"
 
 
@@ -22,10 +16,15 @@ int Button::AddMouse(Mouse *M){
     return 1;
 }
 
-bool Button::Pressed(SDL_Rect *rect, bool change){
+bool Button::Pressed(SDL_Rect *rect, bool change, bool showEvent = false){
     if(state[activationKey]){
         if(SDL_GetTicks64() >= timeout){
-            change = !change;
+            if(!showEvent){
+                change = !change;
+            }
+            else if(EventAdd != nullptr){
+                EventAdd->Show();
+            }
             timeout = SDL_GetTicks64() + Cooldown;
         }
     }
@@ -35,4 +34,8 @@ bool Button::Pressed(SDL_Rect *rect, bool change){
 bool Button::ModifyCooldown(int cooldown){
     Cooldown = cooldown;
     return true;
+}
+
+void Button::AddEvent(Event* EventToAdd){
+    EventAdd = EventToAdd;
 }

@@ -1,13 +1,12 @@
 #pragma once
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
 #include <iostream>
 #include <vector>
 
-#include "button.h"
 #include "entity.h"
-#include "event.h"
 #include "mouse.h"
+#include "button.h"
+
 
 
 class Event{

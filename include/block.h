@@ -4,10 +4,8 @@
 #include <string>
 #include <vector>
 
-
-#include "block.h"
-#include "button.h"
 #include "entity.h"
+#include "button.h"
 #include "event.h"
 #include "player.h"
 

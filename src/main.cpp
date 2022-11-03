@@ -43,6 +43,7 @@ Uint64 end;
 const Uint8 *state = SDL_GetKeyboardState(NULL);
 SDL_Event *input = new SDL_Event;
 bool running = true;
+bool minimized = false;
 
 //Player
 Player *Player1 = new Player("Sima", "../res/owlSpr.png", renderer);
