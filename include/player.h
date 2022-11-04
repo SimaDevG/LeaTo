@@ -1,9 +1,4 @@
 #pragma once
-#include <SDL2/SDL.h>
-#include <iostream>
-#include <string>
-#include <vector>
-
 
 #include "entity.h"
 

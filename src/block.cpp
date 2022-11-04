@@ -4,7 +4,6 @@
 
 
 
-
 Block::Block(const char *filePath, SDL_Renderer *rendrr, Button *Btn, Event *UseMn)
     :BlockButton(Btn), UseMenu(UseMn)
 {

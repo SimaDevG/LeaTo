@@ -1,15 +1,5 @@
 #pragma once
-#include <SDL2/SDL.h>
-#include <iostream>
-#include <string>
-#include <vector>
-
-#include "entity.h"
-#include "button.h"
-#include "event.h"
-#include "player.h"
-
-
+#include "menu.h"
 class Block : public Entity{
 public:
     Block(const char *filePath, SDL_Renderer *rendrr, Button *Btn, Event* UseMn);

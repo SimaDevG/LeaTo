@@ -1,9 +1,5 @@
 #include "../include/entity.h"
 
-
-
-
-
 //Creating the texture/entity
 Entity::Entity(const char* filePath, SDL_Renderer *renderer)
     :texture(NULL), renderer(renderer)

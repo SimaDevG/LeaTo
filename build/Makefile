@@ -1,2 +1,2 @@
 default:
-	g++ ../src/*.cpp  -o LeaTo.exe -O2 -Wall -Wno-missing-braces -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -mwindows
+	g++ ../src/*.cpp -o LeaTo.exe -O2 -Wall -Wno-missing-braces -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -mwindows

@@ -14,6 +14,9 @@ add_executable(LeaTo
     src/player.cpp
 )
 
+set( CMAKE_CXX_COMPILER "C:/msys64/mingw64/bin/g++.exe" )
+set( CMAKE_C_COMPILER "C:/msys64/mingw64/bin/gcc.exe" )
+
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
 
@@ -22,6 +25,8 @@ target_include_directories(LeaTo
     PUBLIC ${SDL2_INCLUDE_DIRS}
     PUBLIC ${SDL2IMAGE_INCLUDE_DIRS}
 )
+
+set(SDL2_image_DIR "C:/msys64/mingw64/lib")
 
 if(WIN32)
     target_link_libraries(LeaTo PUBLIC ${SDL2_LIBRARIES} SDL2_image::SDL2_image mingw32)
