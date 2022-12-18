@@ -12,7 +12,6 @@ public:
     void ModifyAnimationFrames(int num);
     void ModifyLoops(int num);
     void ModifyPixelW(int num);
-
 private:
     std::string usrnm;
 
@@ -24,4 +23,5 @@ private:
     int PixelWidth = 64;
     float loops = 100;
     bool state = false;
+    
 };

@@ -51,12 +51,13 @@ SDL_Event *input = new SDL_Event;
 bool running = true;
 bool minimized = false;
 
-//Player
+//Players
 Player *Player1 = new Player("Sima", "../res/owlSpr.png", renderer);
 
 //Vectors
 std::vector <Entity*> Entities;
 std::vector <Entity*> Hotbar_Entities; //Hotbar (1, 2, 3, 4)
+std::vector <Player*> Players;
 
 //Resources
 Entity *UseIcon = new Entity("../res/UseIcon.png", renderer);
@@ -71,8 +72,8 @@ int GlobalInit(){
     SDL_SetWindowMinimumSize(window, 300, 364);
     SDL_SetWindowMaximumSize(window, 1775, 1000);
     //Window logo
-    logo = IMG_Load("../res/logo.png");
-    SDL_SetWindowIcon(window, logo);
+    /*logo = IMG_Load("../res/logo.png");
+    SDL_SetWindowIcon(window, logo);*/
 
 
     Background->AddAnimationFrames(1);
@@ -80,6 +81,12 @@ int GlobalInit(){
     Background->ReturnBlockEvent()->ReturnEntity(0)->ChangeWDst(100, 100, 1575, 800);
     Background->ReturnBlockEvent()->AddButton(new Button(new SDL_Rect  {500, 500, 64, 64}, "../res/UseIcon.png", renderer, state, SDL_SCANCODE_ESCAPE, input));
     Background->ReturnBlockButton()->ModifyCooldown(150);
+
+    //Players
+    Players.push_back(Player1);
+
+    Player1->ModifyPixelW(64);
+    Player1->ModifyLoops(40);
     return 1;
 }
 
@@ -133,16 +140,16 @@ int LearningPodInit(){
 int Input(){
     //Movement
     if(state[SDL_SCANCODE_D]){
-        Player1->MoveX(3);
+        Players[0]->MoveX(3);
     }
     if(state[SDL_SCANCODE_A]){
-        Player1->MoveX(-3);
+        Players[0]->MoveX(-3);
     }
     if(state[SDL_SCANCODE_S]){
-        Player1->MoveY(3);
+        Players[0]->MoveY(3);
     }
     if(state[SDL_SCANCODE_W]){
-        Player1->MoveY(-3);
+        Players[0]->MoveY(-3);
     }
     //Hotbar
     if(state[SDL_SCANCODE_1]){
@@ -223,13 +230,6 @@ int main(int argc, char* argv[]) {
     //Learning Pod Inits
     LearningPodInit();
 
-    //Player1 inits
-    Player1->ChangeWDst(100, 100, 64, 64);
-    Player1->ChangeWSrc(0, 0, 64, 64);
-
-
-
-
     while(running){
         start = SDL_GetPerformanceCounter();
         while(SDL_PollEvent(input)){
@@ -240,13 +240,13 @@ int main(int argc, char* argv[]) {
 
         Input();
         ProportionsUpdate();
-        Player1->NxtFrame(1);
+        Players[0]->NxtFrame(1);
 
         SDL_RenderPresent(renderer);
         SDL_RenderClear(renderer);
         
         
-        Player1->PlayerRender();
+        Players[0]->PlayerRender();
         Background->Render();
         Background->BlockAnimation(0);
 
@@ -256,14 +256,13 @@ int main(int argc, char* argv[]) {
         for(Block* LP_Render : LearningPods){
             LP_Render->Render();
             LP_Render->BlockAnimation(1);
-            LP_Render->UseBlock(Player1);
+            LP_Render->UseBlock(Players[0]);
         }
-        Background->UseBlock(Player1);
-
+        Background->UseBlock(Players[0]);
         cursor->Update();
         std::cout<<SDL_GetError();
         end = SDL_GetPerformanceCounter();
-        std::cout<< 1.0f / ReturnFrameRate() << "\n";
+        //std::cout<< 1.0f / ReturnFrameRate() << "\n";
     }
     // Close and destroy the window
         

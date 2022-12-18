@@ -1,8 +1,10 @@
 #include "../include/menu.h"
-// File for all classes related to menus.
+/*
+File for all menu related stuff
+*/
 
 
-//Mouse
+/*Mouse*/
 Mouse::Mouse(const char* filePath, SDL_Renderer *rendererm)
 {
     renderer = rendererm;
@@ -40,7 +42,7 @@ bool Mouse::CheckPos(int x, int y){
     }
 }
 
-//Button
+/*Button*/
 Button::Button(SDL_Rect *buttonPos, const char *filePath, SDL_Renderer* rendrr, const Uint8 *pressed, SDL_Scancode key, SDL_Event *event)
     :state(pressed), activationKey(key), E(event)
 {
@@ -79,7 +81,7 @@ void Button::AddEvent(Event* EventToAdd){
 }
 
 
-//Event
+/*Event*/
 Event::Event(SDL_Renderer *renderer, std::vector <Entity*> entities)
 {
     for(Entity* e: entities){

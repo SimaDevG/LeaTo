@@ -9,6 +9,8 @@ Player::Player(std::string username, const char *filePath, SDL_Renderer *rndrr)
     renderer = rndrr;
     texture = loadIMG(filePath, renderer);
     frame = 0;
+    ChangeWSrc(0, 0, 64, 64);
+    ChangeWDst(0, 0, 128, 128);
 }
 int Player::MoveX(int xchange){
     ChangeDstX(ReturnDst()->x + xchange);
@@ -21,9 +23,8 @@ int Player::MoveY(int ychange){
 int Player::NxtFrame(int num){
     int change;
     CtrForChange = loops / AnimationFrames;
-    int max = CtrForChange * AnimationFrames;
 
-    if(ctr < max){
+    if(ctr < loops){
         ctr++;
     }
     else{
@@ -34,7 +35,7 @@ int Player::NxtFrame(int num){
         if(test < ctr){
         frame++;
         }
-        if(frame == AnimationFrames && ctr == max){
+        if(frame == AnimationFrames && ctr == loops){
             frame = 1;
         }
     }
@@ -42,13 +43,13 @@ int Player::NxtFrame(int num){
 
     //Descending or ascending
     if(num == 1){
-        int testDescending = 100 - (CtrForChange * frame);
-        int testAscending = CtrForChange * frame;
-        if(frame == AnimationFrames && ctr == max){
+        float testDescending = loops - (CtrForChange * frame);
+        float testAscending = CtrForChange * frame;
+        if(frame == AnimationFrames && ctr == loops){
             state = true;
         }
         else if(state){
-            if(ctr == max){
+            if(ctr == loops){
                 state = false;
             }
             else if(testDescending < ctr){
@@ -65,6 +66,7 @@ int Player::NxtFrame(int num){
     change = (frame - 1) * PixelWidth;
     ChangeSrc("x", change);
     Render();
+    std::cout<<frame<<"\n";
     return 1;
 }
 int Player::PlayerRender(){
