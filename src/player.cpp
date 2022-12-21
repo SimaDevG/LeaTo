@@ -1,9 +1,9 @@
-#include "../include/player.h"
+#include "../include/user.h"
 
 
 
 
-Player::Player(std::string username, const char *filePath, SDL_Renderer *rndrr)
+User::User(std::string username, const char *filePath, SDL_Renderer *rndrr)
     :usrnm(username)
 {
     renderer = rndrr;
@@ -12,15 +12,15 @@ Player::Player(std::string username, const char *filePath, SDL_Renderer *rndrr)
     ChangeWSrc(0, 0, 64, 64);
     ChangeWDst(0, 0, 128, 128);
 }
-int Player::MoveX(int xchange){
+int User::MoveX(int xchange){
     ChangeDstX(ReturnDst()->x + xchange);
     return 1;
 }
-int Player::MoveY(int ychange){
+int User::MoveY(int ychange){
     ChangeDstY(ReturnDst()->y + ychange);
     return 1;
 }
-int Player::NxtFrame(int num){
+int User::NxtFrame(int num){
     int change;
     CtrForChange = loops / AnimationFrames;
 
@@ -66,23 +66,22 @@ int Player::NxtFrame(int num){
     change = (frame - 1) * PixelWidth;
     ChangeSrc("x", change);
     Render();
-    std::cout<<frame<<"\n";
     return 1;
 }
-int Player::PlayerRender(){
+int User::UserRender(){
     int change = frame * 64;
     ChangeSrc("x", change);
     Render();
     return 1;
 }
 
-void Player::ModifyAnimationFrames(int num){
+void User::ModifyAnimationFrames(int num){
     AnimationFrames = num;
 }
-void Player::ModifyLoops(int num){
+void User::ModifyLoops(int num){
     loops = num;
 }
 
-void Player::ModifyPixelW(int num){
+void User::ModifyPixelW(int num){
     PixelWidth = num;
 }

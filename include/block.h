@@ -1,14 +1,16 @@
 #pragma once
-#include "menu.h"
+#include "utility.h"
 class Block : public Entity{
 public:
     Block(const char *filePath, SDL_Renderer *rendrr, Button *Btn, Event* UseMn);
     int BlockAnimation(int num);
     int AddAnimationFrames(int num);
-    int UseBlock(Player *User);
+    int UseBlock(User *user);
 
     int AddBlockNumber(int num);
     int ReturnBlockNumber();
+
+    void ModifyLoops(int num);
     
     Button* ReturnBlockButton();
 
@@ -22,7 +24,7 @@ private:
     Button* BlockButton;
 
     Event* UseMenu;
-
+    int loops = 100;
     bool MenuinUse = false;
     int ctr = 0;
     int frame = 1;
@@ -31,7 +33,7 @@ private:
     bool state = false;
     int AnimationFrames = 1;
     int CtrForChange;
-    int PixelWidth;
+    int PixelWidth = 128;
 
 };
 

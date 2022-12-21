@@ -1,5 +1,5 @@
 #pragma once
-#include "player.h"
+#include "user.h"
 
 class Event;
 
@@ -14,10 +14,41 @@ private:
     SDL_Rect pos;
 };
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*Button*/
 class Button : public Entity{
 public:
-    Button(SDL_Rect *buttonPos, const char *filePath, SDL_Renderer* rendrr, const Uint8 *pressed, SDL_Scancode key, SDL_Event *event);
+    Button(SDL_Rect *buttonPos, const char *filePath, SDL_Renderer* rendrr, const Uint8 *pressed, SDL_Scancode key, void func(), SDL_Event *event = nullptr);
     int AddMouse(Mouse *M);
     bool Pressed(SDL_Rect *rect, bool change, bool showEvent = false);
     bool ModifyCooldown (int cooldown);
@@ -27,12 +58,41 @@ private:
     inline static Uint64 timeout = 0;
     const Uint8 *state;
     SDL_Scancode activationKey;
+    void (function)();
     SDL_Event *E;
     Mouse *GlobalMouse;
     int Cooldown = 200;
 
     Event *EventAdd;
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /*Event*/

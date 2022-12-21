@@ -1,4 +1,4 @@
-#include "../include/menu.h"
+#include "../include/utility.h"
 /*
 File for all menu related stuff
 */
@@ -43,12 +43,13 @@ bool Mouse::CheckPos(int x, int y){
 }
 
 /*Button*/
-Button::Button(SDL_Rect *buttonPos, const char *filePath, SDL_Renderer* rendrr, const Uint8 *pressed, SDL_Scancode key, SDL_Event *event)
-    :state(pressed), activationKey(key), E(event)
-{
+Button::Button(SDL_Rect *buttonPos, const char *filePath, SDL_Renderer* rendrr, const Uint8 *pressed, SDL_Scancode key, void func(), SDL_Event *event)
+    :state(pressed), activationKey(key), E(event){
     texture = loadIMG(filePath, rendrr);
     renderer = rendrr;
     dst = buttonPos;
+
+    
 }
 
 int Button::AddMouse(Mouse *M){
@@ -68,6 +69,7 @@ bool Button::Pressed(SDL_Rect *rect, bool change, bool showEvent){
             timeout = SDL_GetTicks64() + Cooldown;
         }
     }
+
     return change;
 }
 

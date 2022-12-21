@@ -2,13 +2,13 @@
 
 #include "entity.h"
 
-class Player : public Entity{
+class User : public Entity{
 public:
-    Player(std::string username, const char *filePath, SDL_Renderer *rndrr);
+    User(std::string username, const char *filePath, SDL_Renderer *rndrr);
     int MoveX(int x);
     int MoveY(int y);
     int NxtFrame(int num);
-    int PlayerRender();
+    int UserRender();
     void ModifyAnimationFrames(int num);
     void ModifyLoops(int num);
     void ModifyPixelW(int num);

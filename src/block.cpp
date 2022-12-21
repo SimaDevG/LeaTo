@@ -13,49 +13,61 @@ Block::Block(const char *filePath, SDL_Renderer *rendrr, Button *Btn, Event *Use
 
 int Block::BlockAnimation(int num){
     int change;
-    CtrForChange = 100 / AnimationFrames;
-    int max = CtrForChange * AnimationFrames;
+    CtrForChange = loops / AnimationFrames;
 
-    if(ctr < max){
+    if(ctr < loops){
         ctr++;
     }
-    else{
-        ctr = 0;
+    else if(ctr == loops){
+        ctr = 1;
     }
+
+    //One Dir (Back)
     if(num == 0){
         int test = CtrForChange * frame;
-        if(test < ctr){
+        if(test < ctr && frame != AnimationFrames){
         frame++;
         }
-        if(frame == AnimationFrames && ctr == max){
+        if(frame == AnimationFrames && loops == ctr){
             frame = 1;
         }
     }
 
 
-    //Descending or ascending
+    //(Both)Descending or ascending
+    /**/
     if(num == 1){
-        int testDescending = 100 - (CtrForChange * frame);
+        int testDescending = loops - (CtrForChange * frame); 
         int testAscending = CtrForChange * frame;
-        if(frame == AnimationFrames && ctr == max){
+
+
+        if(frame == AnimationFrames && loops == ctr){ //If ascending end, descend
             state = true;
         }
-        else if(state){
-            if(ctr == max){
-                state = false;
-            }
-            else if(testDescending < ctr){
-                frame--;
-            }
-        }
+
+        //Ascending
         else if(!state){
-            if(testAscending < ctr){
-                frame++;
+            if(testAscending < ctr &&  frame != AnimationFrames){
+                frame++;                                                    
             }   
         }
+
+
+        if(state){
+            if(ctr == loops){
+                state = false;   //Back to default (Ascending)
+            }
+            else if(testDescending == ctr){   
+                frame--;                            //Go down one frame (desc.)
+            }
+        }
+
+
+
     }
     if(frame == 0) frame = 1;
     change = (frame - 1) * PixelWidth;
+    std::cout<<ctr<<" "<<frame<<" "<<CtrForChange<<"\n";
     ChangeSrc("x", change);
     Render();
     return 1;
@@ -67,8 +79,8 @@ int Block::AddAnimationFrames(int num){
     return 1;
 }
 
-int Block::UseBlock(Player *User){
-    if(checkCollision(User->ReturnDst(), ReturnDst())){
+int Block::UseBlock(User *user){
+    if(checkCollision(user->ReturnDst(), ReturnDst())){
         BlockButton->Render();
         MenuinUse = BlockButton->Pressed(ReturnDst(), MenuinUse);
         if(MenuinUse){
@@ -88,6 +100,10 @@ int Block::AddBlockNumber(int num){
 
 int Block::ReturnBlockNumber(){
     return BlockNumber;
+}
+
+void Block::ModifyLoops(int num){
+    loops = num;
 }
 
 Button* Block::ReturnBlockButton(){
