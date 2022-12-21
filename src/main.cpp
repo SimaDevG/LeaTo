@@ -279,19 +279,16 @@ int main(int argc, char* argv[]) {
 
         Input(); //SDL_Scancode Input (State)
         ProportionsUpdate();    //Updates Entities in Window According to Size
-        Users[0]->NxtFrame(1);  //User Frame Update
-
+        Users[0]->UserRender(1);  //User Rendering And Frame Update   
+        Users[0]->Render();  
         SDL_RenderPresent(renderer);    //Updates renderer (Changes made since last rendering)
         SDL_RenderClear(renderer);      //Clears Window
-        
-        
-        Users[0]->UserRender();         //Renders User (first in User Vector)
+          
         Background->Render();           //Renders Background
         //Background->BlockAnimation(0);  //Background Animation (If there is)
 
 
         //Pods Processes
-        Pods[0]->Render();
         Pods[0]->BlockAnimation(1);
         Pods[0]->UseBlock(Users[0]);
 

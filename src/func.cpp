@@ -1,6 +1,7 @@
 #include "../include/func.h"
 
 
+//Loads an IMG (PNG)
 SDL_Texture* loadIMG(const char* filepath, SDL_Renderer* renderer){
     SDL_Texture* texture = NULL;
     texture = IMG_LoadTexture(renderer, filepath);
@@ -10,6 +11,7 @@ SDL_Texture* loadIMG(const char* filepath, SDL_Renderer* renderer){
 	return texture;
 }
 
+//Initializing function (Window)
 void init(SDL_Window *window, SDL_Renderer *renderer){
     // Initialize SDL2
     if(SDL_Init(SDL_INIT_EVERYTHING) != 0){
@@ -28,6 +30,7 @@ void init(SDL_Window *window, SDL_Renderer *renderer){
 
 }
 
+//Check collision between to SDL_Rect
 bool checkCollision(SDL_Rect *rect1, SDL_Rect *rect2){
     if(SDL_HasIntersection(rect1, rect2)){
         return 1;

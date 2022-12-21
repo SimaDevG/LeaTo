@@ -12,6 +12,8 @@ User::User(std::string username, const char *filePath, SDL_Renderer *rndrr)
     ChangeWSrc(0, 0, 64, 64);
     ChangeWDst(0, 0, 128, 128);
 }
+
+//Move User
 int User::MoveX(int xchange){
     ChangeDstX(ReturnDst()->x + xchange);
     return 1;
@@ -20,59 +22,69 @@ int User::MoveY(int ychange){
     ChangeDstY(ReturnDst()->y + ychange);
     return 1;
 }
-int User::NxtFrame(int num){
+
+
+//Change User Frame & Render User
+int User::UserRender(int num){
     int change;
     CtrForChange = loops / AnimationFrames;
 
+    //Ctr Increase
     if(ctr < loops){
         ctr++;
     }
-    else{
-        ctr = 0;
+    else if(ctr == loops){
+        ctr = 1;
     }
+
+    //One Dir (Back)
     if(num == 0){
         int test = CtrForChange * frame;
-        if(test < ctr){
+        if(test < ctr && frame != AnimationFrames){
         frame++;
         }
-        if(frame == AnimationFrames && ctr == loops){
+        if(frame == AnimationFrames && loops == ctr){
             frame = 1;
         }
     }
 
-
-    //Descending or ascending
+    //(Both)Descending or ascending
+    /**/
     if(num == 1){
-        float testDescending = loops - (CtrForChange * frame);
-        float testAscending = CtrForChange * frame;
-        if(frame == AnimationFrames && ctr == loops){
+        int testDescending = loops - (CtrForChange * frame); 
+        int testAscending = CtrForChange * frame;
+
+        //Ascending
+        if(frame == AnimationFrames && loops == ctr){ //If ascending end, descend
             state = true;
+            frame = AnimationFrames - 1;
         }
-        else if(state){
-            if(ctr == loops){
-                state = false;
-            }
-            else if(testDescending < ctr){
-                frame--;
-            }
-        }
+
         else if(!state){
-            if(testAscending < ctr){
-                frame++;
+            if(testAscending < ctr &&  frame != AnimationFrames){
+                frame++;                                                    
             }   
         }
+
+        //Descending
+        else if(state){
+            if(ctr == loops){
+                state = false;   //Back to default (Ascending)
+            }
+            else if(testDescending == ctr){   
+                frame--;                            //Go down one frame (desc.)
+            }
+        }
+
+
     }
+    //std::cout<<frame;
     if(frame == 0) frame = 1;
+    Render();
     change = (frame - 1) * PixelWidth;
     ChangeSrc("x", change);
-    Render();
     return 1;
-}
-int User::UserRender(){
-    int change = frame * 64;
-    ChangeSrc("x", change);
-    Render();
-    return 1;
+    //Same as in class "Block"
 }
 
 void User::ModifyAnimationFrames(int num){

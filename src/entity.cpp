@@ -119,6 +119,7 @@ SDL_Renderer* Entity::ReturnRenderer(){
     return renderer;
 }
 
+//Check Collision Between this and another Entity
 int Entity::CheckCollision(Entity *Entity){
     if(checkCollision(Entity->ReturnDst(), ReturnDst()) == 1){
             return 1;

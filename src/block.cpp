@@ -15,6 +15,7 @@ int Block::BlockAnimation(int num){
     int change;
     CtrForChange = loops / AnimationFrames;
 
+    //Ctr Increase
     if(ctr < loops){
         ctr++;
     }
@@ -33,27 +34,26 @@ int Block::BlockAnimation(int num){
         }
     }
 
-
     //(Both)Descending or ascending
     /**/
     if(num == 1){
         int testDescending = loops - (CtrForChange * frame); 
         int testAscending = CtrForChange * frame;
 
-
+        //Ascending
         if(frame == AnimationFrames && loops == ctr){ //If ascending end, descend
             state = true;
+            frame = AnimationFrames - 1;
         }
 
-        //Ascending
         else if(!state){
             if(testAscending < ctr &&  frame != AnimationFrames){
                 frame++;                                                    
             }   
         }
 
-
-        if(state){
+        //Descending
+        else if(state){
             if(ctr == loops){
                 state = false;   //Back to default (Ascending)
             }
@@ -63,15 +63,14 @@ int Block::BlockAnimation(int num){
         }
 
 
-
     }
+    std::cout<<frame;
     if(frame == 0) frame = 1;
-    change = (frame - 1) * PixelWidth;
-    std::cout<<ctr<<" "<<frame<<" "<<CtrForChange<<"\n";
-    ChangeSrc("x", change);
     Render();
+    change = (frame - 1) * PixelWidth;
+    ChangeSrc("x", change);
     return 1;
-
+    //Same as in class "User"
 }
 
 int Block::AddAnimationFrames(int num){
@@ -81,10 +80,10 @@ int Block::AddAnimationFrames(int num){
 
 int Block::UseBlock(User *user){
     if(checkCollision(user->ReturnDst(), ReturnDst())){
-        BlockButton->Render();
-        MenuinUse = BlockButton->Pressed(ReturnDst(), MenuinUse);
+        BlockButton->Render();                      //Check if User Collides With Block -> Yes? -> Render BlockButton
+        MenuinUse = BlockButton->Pressed(ReturnDst(), MenuinUse);   //If pressed show/don't show Event
         if(MenuinUse){
-            UseMenu->Show();
+            UseMenu->Show();            
         }
     }
     else{
@@ -118,6 +117,9 @@ int Block::PixelWidthBl(int num){
     PixelWidth = num;
     return 1;
 }
+
+
+//Renders a vector of blocks, not a part of class "Block"
 void RenderVectorBlocks(std::vector<Block*> blk){
     for(Block * b : blk){
         b->Render();
