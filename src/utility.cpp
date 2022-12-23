@@ -43,30 +43,27 @@ bool Mouse::CheckPos(int x, int y){
 }
 
 /*Button*/
-Button::Button(SDL_Rect *buttonPos, const char *filePath, SDL_Renderer* rendrr, const Uint8 *pressed, SDL_Scancode key, void func(), SDL_Event *event)
-    :state(pressed), activationKey(key), E(event){
-    texture = loadIMG(filePath, rendrr);
+Button::Button(SDL_Rect *buttonPos, SDL_Renderer* rendrr, const Uint8 *pressed, SDL_Scancode key, void func(), SDL_Event *event)
+    :state(pressed), activationKey(key), E(event), function(func){
     renderer = rendrr;
     dst = buttonPos;
-
-    
 }
 
 int Button::AddMouse(Mouse *M){
     GlobalMouse = M;
-    return 1;
+    return 0;
+}
+
+int Button::AddGButton(const char *filePath){
+    texture = loadIMG(filePath, renderer);
+    return 0;
 }
 
 bool Button::Pressed(SDL_Rect *rect, bool change, bool showEvent){
     if(state[activationKey]){
         if(SDL_GetTicks64() >= timeout){
-            if(!showEvent){
-                change = !change;
-            }
-            else if(EventAdd != nullptr){
-                EventAdd->Show();
-            }
             timeout = SDL_GetTicks64() + Cooldown;
+            function();
         }
     }
 
@@ -122,7 +119,7 @@ int Event::Show(){
             std::cout<<"SDL didn't render out at Event::Show. SDL_Error: "<< SDL_GetError();
         }
     }
-    return 1;
+    return 0;
 }
 
 void Event::AddButton(Button *buttonAdd){

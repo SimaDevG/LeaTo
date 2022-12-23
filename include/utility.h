@@ -33,23 +33,12 @@ private:
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 /*Button*/
 class Button : public Entity{
 public:
-    Button(SDL_Rect *buttonPos, const char *filePath, SDL_Renderer* rendrr, const Uint8 *pressed, SDL_Scancode key, void func(), SDL_Event *event = nullptr);
+    Button(SDL_Rect *buttonPos, SDL_Renderer* rendrr, const Uint8 *pressed /*State For Checking*/, SDL_Scancode key /*Activation Key*/, void func() /*Function to run*/, SDL_Event *event = nullptr);
     int AddMouse(Mouse *M);
+    int AddGButton(const char *filePath); //Add graphical button
     bool Pressed(SDL_Rect *rect, bool change, bool showEvent = false);
     bool ModifyCooldown (int cooldown);
     void AddEvent(Event* EventToAdd);
@@ -58,18 +47,13 @@ private:
     inline static Uint64 timeout = 0;
     const Uint8 *state;
     SDL_Scancode activationKey;
-    void (function)();
     SDL_Event *E;
     Mouse *GlobalMouse;
     int Cooldown = 200;
-
     Event *EventAdd;
+
+    void (*function)(); // Pointer to a function
 };
-
-
-
-
-
 
 
 

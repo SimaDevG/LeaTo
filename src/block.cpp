@@ -64,7 +64,6 @@ int Block::BlockAnimation(int num){
 
 
     }
-    std::cout<<frame;
     if(frame == 0) frame = 1;
     Render();
     change = (frame - 1) * PixelWidth;
@@ -80,7 +79,7 @@ int Block::AddAnimationFrames(int num){
 
 int Block::UseBlock(User *user){
     if(checkCollision(user->ReturnDst(), ReturnDst())){
-        BlockButton->Render();                      //Check if User Collides With Block -> Yes? -> Render BlockButton
+        /*BlockButton->Render();                      //Check if User Collides With Block -> Yes? -> Render BlockButton
         MenuinUse = BlockButton->Pressed(ReturnDst(), MenuinUse);   //If pressed show/don't show Event
         if(MenuinUse){
             UseMenu->Show();            
@@ -89,7 +88,8 @@ int Block::UseBlock(User *user){
     else{
         MenuinUse = false;
     }
-    return 1;
+    return 1;*/
+    }
 }
 
 int Block::AddBlockNumber(int num){

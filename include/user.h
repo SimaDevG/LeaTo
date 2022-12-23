@@ -4,7 +4,7 @@
 
 class User : public Entity{
 public:
-    User(std::string username, const char *filePath, SDL_Renderer *rndrr);
+    User(std::string username, const char *filePath, SDL_Renderer *rndrr, SDL_Rect wSize);
     int MoveX(int x);
     int MoveY(int y);
     int UserRender(int num);
@@ -22,5 +22,7 @@ private:
     int PixelWidth = 64;
     int loops = 100;
     bool state = false;
-    
+
+    //Position & Window Width
+    SDL_Rect Window;
 };
