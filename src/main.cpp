@@ -144,7 +144,7 @@ int LearningPodInit(){
 
 
 
-    Button *button = new Button(new SDL_Rect {ButtonPosX, ButtonPosY, 64, 64}, renderer, state, SDL_SCANCODE_E, []{std::cout<<"Works!";} ,input);   //Button 
+    Button *button = new Button(new SDL_Rect {ButtonPosX, ButtonPosY, 64, 64}, renderer, state, SDL_SCANCODE_E, []{Users[0]->ChangeDst("x", 280);} ,input);   //Button 
     button->AddMouse(cursor);
 
     //Entity *menuBackground = new Entity("../res/LPMenu.png", renderer);   menuBackground->ChangeWDst(MenuPosX, MenuPosY, 125, 125);            //Menu Background //Not Necessary Right Now, Later on For Modifying Time.
@@ -253,7 +253,7 @@ int main(int argc, char* argv[]) {
 
         Users[0]->UserRender(1);  //User Rendering And Frame Update  
 
-        //Pods[0]->UseBlock(Users[0]);
+        Pods[0]->UseBlock(Users[0]);
 
         //Cursor & Hotbar
         Hotbar->Show();

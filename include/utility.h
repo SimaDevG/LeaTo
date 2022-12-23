@@ -39,7 +39,7 @@ public:
     Button(SDL_Rect *buttonPos, SDL_Renderer* rendrr, const Uint8 *pressed /*State For Checking*/, SDL_Scancode key /*Activation Key*/, void func() /*Function to run*/, SDL_Event *event = nullptr);
     int AddMouse(Mouse *M);
     int AddGButton(const char *filePath); //Add graphical button
-    bool Pressed(SDL_Rect *rect, bool change, bool showEvent = false);
+    bool Pressed(SDL_Rect *rect);
     bool ModifyCooldown (int cooldown);
     void AddEvent(Event* EventToAdd);
 

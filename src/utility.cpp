@@ -59,15 +59,14 @@ int Button::AddGButton(const char *filePath){
     return 0;
 }
 
-bool Button::Pressed(SDL_Rect *rect, bool change, bool showEvent){
+bool Button::Pressed(SDL_Rect *rect){
     if(state[activationKey]){
         if(SDL_GetTicks64() >= timeout){
             timeout = SDL_GetTicks64() + Cooldown;
             function();
         }
     }
-
-    return change;
+    return 0;
 }
 
 bool Button::ModifyCooldown(int cooldown){

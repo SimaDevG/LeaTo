@@ -79,17 +79,9 @@ int Block::AddAnimationFrames(int num){
 
 int Block::UseBlock(User *user){
     if(checkCollision(user->ReturnDst(), ReturnDst())){
-        /*BlockButton->Render();                      //Check if User Collides With Block -> Yes? -> Render BlockButton
-        MenuinUse = BlockButton->Pressed(ReturnDst(), MenuinUse);   //If pressed show/don't show Event
-        if(MenuinUse){
-            UseMenu->Show();            
-        }
+        BlockButton->Pressed(ReturnDst());
     }
-    else{
-        MenuinUse = false;
-    }
-    return 1;*/
-    }
+        return 0;
 }
 
 int Block::AddBlockNumber(int num){
