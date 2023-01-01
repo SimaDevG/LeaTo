@@ -8,6 +8,7 @@ public:
     int MoveX(int x);
     int MoveY(int y);
     int UserRender(int num);
+    void focusMode();
     void ModifyAnimationFrames(int num);
     void ModifyLoops(int num);
     void ModifyPixelW(int num);
@@ -25,4 +26,8 @@ private:
 
     //Position & Window Width
     SDL_Rect Window;
+
+    //Focus Mode
+    bool focus = false;
+    Uint32 focusTO;
 };

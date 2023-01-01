@@ -1,8 +1,9 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-/*#include <SDL2/SDL_ttf.h>*/
+#include <SDL2/SDL_ttf.h>
 #include <iostream>
 #include <vector>
+#include <functional>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <iostream>
@@ -14,8 +15,6 @@
 #include "../include/user.h"
 #include "../include/func.h"
 #include "../include/utility.h"
-
-
 
 
 
@@ -32,10 +31,10 @@
 //SDL Initializations
 
         //SDL
-int *WindowWidth = new int(300);
-int *WindowHeight = new int(364);
+int WindowWidth = 300;
+int WindowHeight = 364;
 SDL_Surface *logo;
-SDL_Window* window = SDL_CreateWindow( "LeaTo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, *WindowWidth, *WindowHeight, SDL_WINDOW_RESIZABLE);
+SDL_Window* window = SDL_CreateWindow( "LeaTo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WindowWidth, WindowHeight, SDL_WINDOW_RESIZABLE);
 SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC);
 
 
@@ -78,17 +77,17 @@ Mouse *cursor = new Mouse("../res/cursor.png", renderer);
 
 
         //Users
-User *ThisUser = new User("Sima", "../res/owlSpr.png", renderer, SDL_Rect {0, 0, *WindowWidth, *WindowHeight});
+User *ThisUser = new User("Sima", "../res/owlSpr.png", renderer, SDL_Rect {0, 0, WindowWidth, WindowHeight});
 
 
         //Hotbar
-Event *Hotbar = new Event(renderer, Hotbar_Entities);
+Hotbar *hotbar = new Hotbar(renderer);
+Uint32 hotbarTimeout;
 
 
         //Learning Pods
 std::vector <Block*> Pods;
 /*------------------------------------------*/
-
 
 
 
@@ -123,37 +122,35 @@ int GlobalInit(){
 }
 
 int HotbarInit(){
-    for(int box = 0; box < 3; box++){               //Three boxes so three loops
-        Hotbar->AddEntity(new Entity("../res/hotbarbox.png", renderer));        //Add entity to Hotbar Vector
-        Hotbar->ReturnEntity(box)->ChangeWSrc(0, 0, 64, 64);                    //Change Entity ^ src size
-        Hotbar->ReturnEntity(box)->ChangeWDst(54 + (64 * box), 290, 64, 64);     // Change Entity ^ dst size (Width according to box num)
+    for(int box = 0; box < 3; box++){           //Three boxes so three loops
+        hotbar->AddEntity(new Entity("../res/hotbarbox.png", renderer));         //Add entity to Hotbar Vector
+        hotbar->ReturnEntity(box)->ChangeWSrc(0, 0, 64, 64);                     //Change Entity ^ src size
+        hotbar->ReturnEntity(box)->ChangeWDst(54 + (64 * box), 290, 64, 64);     // Change Entity ^ dst size (Width according to box num)
     }
 
     return 0;
 }
 
 int LearningPodInit(){
-    int BlockPosX =  *WindowWidth * 0.25;   //Block Position in the window (In relation to the window size)
-    int BlockPosY = *WindowHeight * 0.1;
+    int BlockPosX =  WindowWidth * 0.25;   //Block Position in the window (In relation to the window size)
+    int BlockPosY = WindowHeight * 0.1;
 
     int ButtonPosX = BlockPosX + 43;       //  Button Position in the Block
     int ButtonPosY = BlockPosY + 43;
 
     /*int MenuPosX = BlockPosX + 12.5;         // Menu Position of the Block
     int MenuPosY = BlockPosY + 12.5;*/ //Not in use right now
-
-
-
-    Button *button = new Button(new SDL_Rect {ButtonPosX, ButtonPosY, 64, 64}, renderer, state, SDL_SCANCODE_E, []{Users[0]->ChangeDst("x", 280);} ,input);   //Button 
+    Button *button = new Button(new SDL_Rect {ButtonPosX, ButtonPosY, 64, 64}, renderer, state, SDL_SCANCODE_E);    //Button 
+    button->AddFunction([]{Users[0]->focusMode();});
     button->AddMouse(cursor);
 
-    //Entity *menuBackground = new Entity("../res/LPMenu.png", renderer);   menuBackground->ChangeWDst(MenuPosX, MenuPosY, 125, 125);            //Menu Background //Not Necessary Right Now, Later on For Modifying Time.
+    //Entity *menuBackground = new Entity("../res/LPMenu.png", renderer);   menuBackground->ChangeWDst(MenuPosX, MenuPosY, 125, 125);          //Menu Background //Not Necessary Right Now, Later on For Modifying Time.
     std::vector <Entity*> *menuEntities = new std::vector <Entity*>;                                                                           //Entities in a Menu
     Event *menu = new Event(renderer, *menuEntities);                                                                                          //Menu
-    //menu->AddEntity(menuBackground);                                                                                                           //Background to Menu ^
+    //menu->AddEntity(menuBackground);                                                                                                         //Background to Menu ^
 
     Block *block = new Block("../res/LearningPod.png", renderer, button, menu);                                                                //Block
-    block->ChangeWDst(BlockPosX, BlockPosY, 150, 150);                                                                                                  //Size Dst                                                                                                      //
+    block->ChangeWDst(BlockPosX, BlockPosY, 150, 150);                                                                                         //Size Dst                                                                                                      //
     block->ChangeWSrc(0, 0, 128, 128);                                                                                                         //Size Src  
     block->AddAnimationFrames(8);                                                                                                              //8 Animation Frames in Block
     block->AddBlockNumber(1);
@@ -165,7 +162,7 @@ int LearningPodInit(){
 }
 
 int Input(){
-
+    int Cooldown = 125; //(Hotbar)
 //User
     //User Movement
     if(state[SDL_SCANCODE_D]){
@@ -185,25 +182,18 @@ int Input(){
 /*------------------------------------------*/
 //Hotbar
     //Hotbar Focus
-    if(state[SDL_SCANCODE_1]){
-        for(int box = 0; box < 3; ++box){
-            Hotbar->ReturnEntity(box)->ChangeSrc("x", 0); //Resets all other
-        }
-        Hotbar->ReturnEntity(0)->ChangeSrc("x", 64);  //Sets the one used (First, 0)
+    if(state[SDL_SCANCODE_1] && SDL_GetTicks() >= hotbarTimeout){
+        hotbar->setinUse(0, !(*hotbar->ReturninUse()[0]));
+        hotbarTimeout = SDL_GetTicks() + Cooldown;
     }
-    if(state[SDL_SCANCODE_2]){
-        for(int box = 0; box < 3; ++box){
-            Hotbar->ReturnEntity(box)->ChangeSrc("x", 0); //--||--
-        }
-        Hotbar->ReturnEntity(1)->ChangeSrc("x", 64);      //--||--
+    if(state[SDL_SCANCODE_2] && SDL_GetTicks() >= hotbarTimeout){
+        hotbar->setinUse(1, !(*hotbar->ReturninUse()[1]));
+        hotbarTimeout = SDL_GetTicks() + Cooldown;
     }
-    if(state[SDL_SCANCODE_3]){
-        for(int box = 0; box < 3; ++box){
-            Hotbar->ReturnEntity(box)->ChangeSrc("x", 0);   //--||--
-        }
-        Hotbar->ReturnEntity(2)->ChangeSrc("x", 64);        //--||--
+    if(state[SDL_SCANCODE_3] && SDL_GetTicks() >= hotbarTimeout){
+        hotbar->setinUse(2, !(*hotbar->ReturninUse()[2]));
+        hotbarTimeout = SDL_GetTicks() + Cooldown;
     }
-
     return 0;
 
 }
@@ -215,7 +205,6 @@ float ReturnFrameRate(){
 int main(int argc, char* argv[]) {
 
     //Lambda Function For Initializer Functions
-    /*[](){*/
         //Global Inits
         GlobalInit();
 
@@ -224,7 +213,6 @@ int main(int argc, char* argv[]) {
 
         //Learning Pod Inits
         LearningPodInit();
-    /*};*/
 
     //Application Loop
     while(running){
@@ -256,7 +244,7 @@ int main(int argc, char* argv[]) {
         Pods[0]->UseBlock(Users[0]);
 
         //Cursor & Hotbar
-        Hotbar->Show();
+        hotbar->RenderHotbar();
         cursor->Update();
         //FPS And Get Errors
         std::cout<<SDL_GetError();

@@ -43,14 +43,24 @@ bool Mouse::CheckPos(int x, int y){
 }
 
 /*Button*/
-Button::Button(SDL_Rect *buttonPos, SDL_Renderer* rendrr, const Uint8 *pressed, SDL_Scancode key, void func(), SDL_Event *event)
-    :state(pressed), activationKey(key), E(event), function(func){
+Button::Button(SDL_Rect *buttonPos, SDL_Renderer* rendrr, const Uint8 *pressed, SDL_Scancode key)
+    :state(pressed), activationKey(key){
     renderer = rendrr;
     dst = buttonPos;
 }
 
+int Button::AddEvent(SDL_Event* Event){
+    event = Event;
+    return 0;
+}
+
 int Button::AddMouse(Mouse *M){
     GlobalMouse = M;
+    return 0;
+}
+
+int Button::AddFunction(void func()){
+    function = func;
     return 0;
 }
 
@@ -80,7 +90,10 @@ void Button::AddEvent(Event* EventToAdd){
 
 
 /*Event*/
-Event::Event(SDL_Renderer *renderer, std::vector <Entity*> entities)
+Event::Event()
+{
+}
+Event::Event(SDL_Renderer *renderer, std::vector<Entity *> entities)
 {
     for(Entity* e: entities){
         entities.push_back(e);
@@ -129,4 +142,43 @@ void Event::AddButtonV(std::vector <Button*> buttonVector){
     for(Button *beAddedButtons : buttonVector){
         buttons.push_back(beAddedButtons);
     }
+}
+
+
+
+
+
+Hotbar::Hotbar(SDL_Renderer *Renderer){
+    renderer = Renderer;
+    ReturnEntities().push_back(new Entity("../res/hotbarbox.png", renderer));
+}
+
+int Hotbar::RenderHotbar(){
+    int iterator = 0;
+    for(bool *box : inUse){
+        if(*box){
+            entities[iterator]->ChangeWSrc(64, 0, 64, 64);
+        }
+        else{
+            entities[iterator]->ChangeWSrc(0, 0, 64, 64);
+        }
+
+        // std::cout<<*inUse[iterator]<<std::endl;
+        iterator++;
+    }
+    Show();
+    return 0;
+}
+
+std::vector <bool*> Hotbar::ReturninUse(){
+    return inUse;
+}
+
+int Hotbar::setinUse(int index, bool value){
+    for(bool *box : inUse){
+        *box = false;
+    }
+    *inUse[index] = value;
+    std::cout<<*inUse[index]<<std::endl;
+    return 0;
 }

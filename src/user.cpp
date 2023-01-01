@@ -15,11 +15,11 @@ User::User(std::string username, const char *filePath, SDL_Renderer *rndrr, SDL_
 
 //Move User
 int User::MoveX(int xchange){
-    if(xchange > 0 && ReturnDst()->x < (Window.w - ReturnDst()->w)){ //Positive asked change 
-        ChangeDstX(ReturnDst()->x + xchange);                        //If position is less than window - user width -> Move
+    if(xchange > 0 && ReturnDst()->x < (Window.w - ReturnDst()->w) && !focus){ //Positive asked change 
+        ChangeDstX(ReturnDst()->x + xchange);                                  //If position is less than window - user width -> Move
     }
 
-    else if(xchange < 0 && 0 < ReturnDst()->x){         //Negative asked change
+    else if(xchange < 0 && 0 < ReturnDst()->x && !focus){         //Negative asked change
         ChangeDstX(ReturnDst()->x + xchange);           //If position is more than 0 (Width) -> Move
     }
 
@@ -30,15 +30,11 @@ int User::MoveX(int xchange){
     return 0;
 }
 int User::MoveY(int ychange){
-    if(ychange > 0){
-        if(ReturnDst()->y < (Window.h - ReturnDst()->h) -64){   //Positive asked change 
-            ChangeDstY(ReturnDst()->y + ychange);           //If position is less than window - user height - hotbar height -> Move
-        }
+    if(ychange > 0 && ReturnDst()->y < (Window.h - ReturnDst()->h) - 64 && !focus){   //Positive asked change 
+        ChangeDstY(ReturnDst()->y + ychange);           //If position is less than window - user height - hotbar height -> Move
     }
-    else if(ychange < 0){
-        if(0 < ReturnDst()->y / 2){                         //Negative asked change
-            ChangeDstY(ReturnDst()->y + ychange);           //If position is more than 0 (Height) -> Move
-        }
+    else if(ychange < 0 && 0 < ReturnDst()->y / 2  && !focus){                       //Negative asked change
+        ChangeDstY(ReturnDst()->y + ychange);           //If position is more than 0 (Height) -> Move
     }
     else{
         std::cout<<"Not valid input \n";
@@ -109,6 +105,17 @@ int User::UserRender(int num){
     Render();
     return 1;
     //Same as in class "Block"
+}
+
+void User::focusMode(){
+    focus = !focus;
+    //Get Block Pos to Position User
+    int BlockPosX =  300 * 0.25;   
+    int BlockPosY = 364 * 0.1;
+
+    if(focus){
+        ChangeWDst(BlockPosX + 11, BlockPosY + 11, 128, 128);
+    }
 }
 
 void User::ModifyAnimationFrames(int num){

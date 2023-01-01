@@ -36,8 +36,10 @@ private:
 /*Button*/
 class Button : public Entity{
 public:
-    Button(SDL_Rect *buttonPos, SDL_Renderer* rendrr, const Uint8 *pressed /*State For Checking*/, SDL_Scancode key /*Activation Key*/, void func() /*Function to run*/, SDL_Event *event = nullptr);
+    Button(SDL_Rect *buttonPos, SDL_Renderer* rendrr, const Uint8 *pressed /*State For Checking*/, SDL_Scancode key /*Activation Key*/);
+    int AddEvent(SDL_Event *event);
     int AddMouse(Mouse *M);
+    int AddFunction(void func());
     int AddGButton(const char *filePath); //Add graphical button
     bool Pressed(SDL_Rect *rect);
     bool ModifyCooldown (int cooldown);
@@ -47,12 +49,12 @@ private:
     inline static Uint64 timeout = 0;
     const Uint8 *state;
     SDL_Scancode activationKey;
-    SDL_Event *E;
+    SDL_Event *event;
     Mouse *GlobalMouse;
     int Cooldown = 200;
     Event *EventAdd;
-
-    void (*function)(); // Pointer to a function
+        
+    void(*function)();   // Pointer to a function
 };
 
 
@@ -91,11 +93,20 @@ public:
     int Show();
     void AddButtonV(std::vector <Button*> buttonVector);
     void AddButton(Button* buttonAdd);
-
-private:
     SDL_Renderer *renderer;
     std::vector <Entity*> entities;
     std::vector <Button*> buttons;
     Mouse *M;
     SDL_Event* event;
+};
+
+/*Hotbar*/
+class Hotbar : public Event{
+public:
+    Hotbar(SDL_Renderer *renderer);
+    int RenderHotbar();
+    std::vector <bool*> ReturninUse();
+    int setinUse(int, bool);
+private:
+    std::vector <bool*> inUse = {new bool(false), new bool(false), new bool(false)}; //Three Boxes, None in Use
 };
