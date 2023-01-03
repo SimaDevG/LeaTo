@@ -38,16 +38,18 @@ class Button : public Entity{
 public:
     Button(SDL_Rect *buttonPos, SDL_Renderer* rendrr, const Uint8 *pressed /*State For Checking*/, SDL_Scancode key /*Activation Key*/);
     int AddEvent(SDL_Event *event);
-    int AddMouse(Mouse *M);
+    int AddMouse(Mouse *M, bool *mouseState);
     int AddFunction(void func());
     int AddGButton(const char *filePath); //Add graphical button
-    bool Pressed(SDL_Rect *rect);
+    bool PressedK();
+    bool PressedM(SDL_Rect &rect);
     bool ModifyCooldown (int cooldown);
     void AddEvent(Event* EventToAdd);
 
 private:
     inline static Uint64 timeout = 0;
     const Uint8 *state;
+    bool *mouseState;
     SDL_Scancode activationKey;
     SDL_Event *event;
     Mouse *GlobalMouse;

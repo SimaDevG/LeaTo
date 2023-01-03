@@ -79,7 +79,9 @@ int Block::AddAnimationFrames(int num){
 
 int Block::UseBlock(User *user){
     if(checkCollision(user->ReturnDst(), ReturnDst())){
-        BlockButton->Pressed(ReturnDst());
+        BlockButton->PressedK();
+        SDL_Rect rect = {0, 0, 300, 360};
+        BlockButton->PressedM(rect); 
     }
         return 0;
 }

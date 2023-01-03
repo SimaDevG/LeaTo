@@ -45,6 +45,7 @@ bool Mouse::CheckPos(int x, int y){
 /*Button*/
 Button::Button(SDL_Rect *buttonPos, SDL_Renderer* rendrr, const Uint8 *pressed, SDL_Scancode key)
     :state(pressed), activationKey(key){
+    mouseState = NULL;
     renderer = rendrr;
     dst = buttonPos;
 }
@@ -54,8 +55,9 @@ int Button::AddEvent(SDL_Event* Event){
     return 0;
 }
 
-int Button::AddMouse(Mouse *M){
+int Button::AddMouse(Mouse *M, bool *mouse = nullptr){
     GlobalMouse = M;
+    mouseState = mouse;
     return 0;
 }
 
@@ -69,7 +71,7 @@ int Button::AddGButton(const char *filePath){
     return 0;
 }
 
-bool Button::Pressed(SDL_Rect *rect){
+bool Button::PressedK(){
     if(state[activationKey]){
         if(SDL_GetTicks64() >= timeout){
             timeout = SDL_GetTicks64() + Cooldown;
@@ -77,6 +79,14 @@ bool Button::Pressed(SDL_Rect *rect){
         }
     }
     return 0;
+}
+
+bool Button::PressedM(SDL_Rect &rect){
+    if(*mouseState && CheckCollision(GlobalMouse) && SDL_GetTicks64() >= timeout){
+        function();
+        timeout = SDL_GetTicks64() + Cooldown;
+    }
+    return true;
 }
 
 bool Button::ModifyCooldown(int cooldown){
@@ -153,7 +163,7 @@ Hotbar::Hotbar(SDL_Renderer *Renderer){
     ReturnEntities().push_back(new Entity("../res/hotbarbox.png", renderer));
 }
 
-int Hotbar::RenderHotbar(){
+int Hotbar::RenderHotbar(){                                             //Renders entire hotbar, changing src and therefore -> focus effect
     int iterator = 0;
     for(bool *box : inUse){
         if(*box){
@@ -170,11 +180,11 @@ int Hotbar::RenderHotbar(){
     return 0;
 }
 
-std::vector <bool*> Hotbar::ReturninUse(){
+std::vector <bool*> Hotbar::ReturninUse(){ //Returns Vector of the Hotbar Block in Use
     return inUse;
 }
 
-int Hotbar::setinUse(int index, bool value){
+int Hotbar::setinUse(int index, bool value){    //Unfocuses All Other Hotbar Components, And Focuses The Inquired One
     for(bool *box : inUse){
         *box = false;
     }

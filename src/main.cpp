@@ -4,8 +4,6 @@
 #include <iostream>
 #include <vector>
 #include <functional>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
 #include <iostream>
 #include <vector>
 #include <string>
@@ -19,8 +17,8 @@
 
 
 /*To Do
-- Get SDL TTF
-- Fix Pods focus mod
+- Mouse Button
+- Make pods focus mod (Drop Down Menu, Choices (Timers))
 - Fix Hotbar Focus (Unfocus)
 - Looks
 - Networking
@@ -48,9 +46,13 @@ SDL_Event *input = new SDL_Event;
 
         //Functionality
 bool running = true;
-
+bool *mouseDown = new bool(false);
 
         //Window
+
+
+
+        //Fonts
 
 
 
@@ -142,7 +144,7 @@ int LearningPodInit(){
     int MenuPosY = BlockPosY + 12.5;*/ //Not in use right now
     Button *button = new Button(new SDL_Rect {ButtonPosX, ButtonPosY, 64, 64}, renderer, state, SDL_SCANCODE_E);    //Button 
     button->AddFunction([]{Users[0]->focusMode();});
-    button->AddMouse(cursor);
+    button->AddMouse(cursor, mouseDown);
 
     //Entity *menuBackground = new Entity("../res/LPMenu.png", renderer);   menuBackground->ChangeWDst(MenuPosX, MenuPosY, 125, 125);          //Menu Background //Not Necessary Right Now, Later on For Modifying Time.
     std::vector <Entity*> *menuEntities = new std::vector <Entity*>;                                                                           //Entities in a Menu
@@ -216,12 +218,14 @@ int main(int argc, char* argv[]) {
 
     //Application Loop
     while(running){
-        start = SDL_GetPerformanceCounter(); //FPS Counter Start
+        //start = SDL_GetPerformanceCounter(); //FPS Counter Start
 
         while(SDL_PollEvent(input)){  //SDL_QUIT Input
             if(input->type == SDL_QUIT){
                 running = false;
             }
+            if(input->type == SDL_MOUSEBUTTONDOWN){  *mouseDown = true;  }
+            else                                         *mouseDown = false;
         }
 
         Input(); //SDL_Scancode Input (State)
@@ -248,15 +252,17 @@ int main(int argc, char* argv[]) {
         cursor->Update();
         //FPS And Get Errors
         std::cout<<SDL_GetError();
-        end = SDL_GetPerformanceCounter();
+        //end = SDL_GetPerformanceCounter();
         //std::cout<< 1.0f / ReturnFrameRate() << "\n";
     }
 /*------------------------------------------*/
 //Quitting
     // Close and destroy the window
     SDL_DestroyWindow(window);
-
     // Clean up
+    IMG_Quit();
+    TTF_Quit();
     SDL_Quit();
+
     return 0;
 }
