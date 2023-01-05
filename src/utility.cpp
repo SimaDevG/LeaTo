@@ -72,21 +72,22 @@ int Button::AddGButton(const char *filePath){
 }
 
 bool Button::PressedK(){
-    if(state[activationKey]){
-        if(SDL_GetTicks64() >= timeout){
-            timeout = SDL_GetTicks64() + Cooldown;
-            function();
-        }
+    if(state[activationKey] && SDL_GetTicks64() >= timeout){
+        timeout = SDL_GetTicks64() + Cooldown;
+        function();
+        return true;
     }
-    return 0;
+    else{ return false; }
+
 }
 
 bool Button::PressedM(SDL_Rect &rect){
     if(*mouseState && CheckCollision(GlobalMouse) && SDL_GetTicks64() >= timeout){
         function();
         timeout = SDL_GetTicks64() + Cooldown;
+        return true;
     }
-    return true;
+    else {return false;}
 }
 
 bool Button::ModifyCooldown(int cooldown){
@@ -103,9 +104,9 @@ void Button::AddEvent(Event* EventToAdd){
 Event::Event()
 {
 }
-Event::Event(SDL_Renderer *renderer, std::vector<Entity *> entities)
+Event::Event(SDL_Renderer *renderer, std::vector<Entity *> Ventities)
 {
-    for(Entity* e: entities){
+    for(Entity* e: Ventities){
         entities.push_back(e);
     }
 }

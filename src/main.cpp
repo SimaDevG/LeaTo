@@ -17,9 +17,8 @@
 
 
 /*To Do
-- Mouse Button
 - Make pods focus mod (Drop Down Menu, Choices (Timers))
-- Fix Hotbar Focus (Unfocus)
+- Add Centrate Inside Element Function
 - Looks
 - Networking
 */
@@ -89,6 +88,7 @@ Uint32 hotbarTimeout;
 
         //Learning Pods
 std::vector <Block*> Pods;
+Entity Bg_Lp("../res/Menu.png", renderer);
 /*------------------------------------------*/
 
 
@@ -140,24 +140,26 @@ int LearningPodInit(){
     int ButtonPosX = BlockPosX + 43;       //  Button Position in the Block
     int ButtonPosY = BlockPosY + 43;
 
+    int MenuPosX = BlockPosX + 15;
+    int MenuPosY = BlockPosY + 15;
+
     /*int MenuPosX = BlockPosX + 12.5;         // Menu Position of the Block
     int MenuPosY = BlockPosY + 12.5;*/ //Not in use right now
     Button *button = new Button(new SDL_Rect {ButtonPosX, ButtonPosY, 64, 64}, renderer, state, SDL_SCANCODE_E);    //Button 
     button->AddFunction([]{Users[0]->focusMode();});
     button->AddMouse(cursor, mouseDown);
 
-    //Entity *menuBackground = new Entity("../res/LPMenu.png", renderer);   menuBackground->ChangeWDst(MenuPosX, MenuPosY, 125, 125);          //Menu Background //Not Necessary Right Now, Later on For Modifying Time.
-    std::vector <Entity*> *menuEntities = new std::vector <Entity*>;                                                                           //Entities in a Menu
-    Event *menu = new Event(renderer, *menuEntities);                                                                                          //Menu
-    //menu->AddEntity(menuBackground);                                                                                                         //Background to Menu ^
-
-    Block *block = new Block("../res/LearningPod.png", renderer, button, menu);                                                                //Block
-    block->ChangeWDst(BlockPosX, BlockPosY, 150, 150);                                                                                         //Size Dst                                                                                                      //
-    block->ChangeWSrc(0, 0, 128, 128);                                                                                                         //Size Src  
-    block->AddAnimationFrames(8);                                                                                                              //8 Animation Frames in Block
+    Bg_Lp.ChangeWDst(MenuPosX, MenuPosY, 120, 120);          //Menu Background //Not Necessary Right Now, Later on For Modifying Time.
+    std::vector <Entity*> menuEntities;            //Entities in a Menu
+    menuEntities.push_back(&Bg_Lp);
+    Event *menu = new Event(renderer, menuEntities);                                                           //Menu
+    Block *block = new Block("../res/LearningPod.png", renderer, button, menu);                                //Block
+    block->ChangeWDst(BlockPosX, BlockPosY, 150, 150);                                                         //Size Dst                                                                                                      //
+    block->ChangeWSrc(0, 0, 128, 128);                                                                         //Size Src  
+    block->AddAnimationFrames(8);                                                                              //8 Animation Frames in Block
     block->AddBlockNumber(1);
 
-    Pods.push_back(block);                                                                                                                     //Block Added to Pods
+    Pods.push_back(block);                                                                                   //Block Added to Pods
 
 
     return 0;

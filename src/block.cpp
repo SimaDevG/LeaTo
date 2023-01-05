@@ -5,7 +5,7 @@
 
 
 Block::Block(const char *filePath, SDL_Renderer *rendrr, Button *Btn, Event *UseMn)
-    :BlockButton(Btn), UseMenu(UseMn)
+    :BlockButton(Btn), menu(UseMn)
 {
     texture = loadIMG(filePath, rendrr);
     renderer = rendrr;
@@ -68,6 +68,7 @@ int Block::BlockAnimation(int num){
     Render();
     change = (frame - 1) * PixelWidth;
     ChangeSrc("x", change);
+
     return 1;
     //Same as in class "User"
 }
@@ -78,11 +79,11 @@ int Block::AddAnimationFrames(int num){
 }
 
 int Block::UseBlock(User *user){
-    if(checkCollision(user->ReturnDst(), ReturnDst())){
-        BlockButton->PressedK();
-        SDL_Rect rect = {0, 0, 300, 360};
-        BlockButton->PressedM(rect); 
+    SDL_Rect rect = {0, 0, 300, 360};
+    if(checkCollision(user->ReturnDst(), ReturnDst()) && (BlockButton->PressedK() || BlockButton->PressedM(rect))){
+        MenuinUse = !MenuinUse;
     }
+    if(MenuinUse) menu->Show();
         return 0;
 }
 
@@ -104,7 +105,7 @@ Button* Block::ReturnBlockButton(){
 }
 
 Event* Block::ReturnBlockEvent(){
-    return UseMenu;
+    return menu;
 }
 
 int Block::PixelWidthBl(int num){

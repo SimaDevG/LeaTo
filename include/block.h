@@ -23,7 +23,7 @@ private:
 
     Button* BlockButton;
 
-    Event* UseMenu;
+    Event* menu;
     int loops = 100;
     bool MenuinUse = false;
     int ctr = 0;
